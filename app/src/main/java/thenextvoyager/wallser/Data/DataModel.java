@@ -1,7 +1,6 @@
 package thenextvoyager.wallser.Data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by Abhiroj on 3/6/2017.
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 
 public class DataModel implements Serializable {
 
-    public static ArrayList<DataModel> model;
     public String imageURL;
     public String downloadURL;
     public String name;

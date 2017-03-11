@@ -11,7 +11,6 @@ import thenextvoyager.wallser.R;
 public class Constants {
 
     public static String api_key;
-
     Context context;
 
     public Constants(Context context) {

@@ -24,13 +24,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
-import static thenextvoyager.wallser.Data.DataModel.model;
+import static thenextvoyager.wallser.Data.Constants.api_key;
 
 
 /**
@@ -49,13 +48,13 @@ public class PageFragment extends Fragment {
      * Unsplash API call parameter, By Default=latest
      * Change it in Pager Fragment, based on Tab tapped
      */
-    public static String order_By = "latest";
-
+    public String order_By = "latest";
     RecyclerView recyclerView;
     ImageAdapter imageAdapter;
     boolean first_call = true;
     GridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
+    private ArrayList<DataModel> model;
 
     public static Fragment newInstance(String callFor) {
         Log.d(TAG, "Instantiating " + callFor + " Fragment");
@@ -70,10 +69,8 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-            order_By = ((savedInstanceState.getString(ARG_PAGE) == "Popular") ? "popular" : "latest");
+        order_By = ((getArguments().getString(ARG_PAGE) == "Popular") ? "popular" : "latest");
             Log.d(TAG, "Ordering the results by " + order_By);
-        }
         layoutManager = new GridLayoutManager(getContext(), 2);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -108,8 +105,8 @@ public class PageFragment extends Fragment {
     void loadDataUsingVolley(int page) {
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
         dialog.show();
-        final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        final String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + Constants.api_key + "&per_page=" + per_page + "&order_by=" + order_By;
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_By;
         Log.d(TAG, URL);
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
