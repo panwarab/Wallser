@@ -88,7 +88,7 @@ public class PageFragment extends Fragment {
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
         dialog.show();
         final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        final String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=80cb47e7ad18216929bf3fcb67d291d8600d1f69ba71e481aa7ae115f8d9ddf1";
+        final String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=";
         Log.d(TAG, URL);
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
