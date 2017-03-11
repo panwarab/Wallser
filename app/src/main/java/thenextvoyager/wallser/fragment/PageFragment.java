@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
@@ -88,7 +89,7 @@ public class PageFragment extends Fragment {
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
         dialog.show();
         final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        final String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=";
+        final String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + Constants.api_key;
         Log.d(TAG, URL);
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override

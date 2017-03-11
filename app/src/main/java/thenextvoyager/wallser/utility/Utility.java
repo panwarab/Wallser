@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
 
 import thenextvoyager.wallser.Data.ImageContract;
 
@@ -30,30 +29,32 @@ import thenextvoyager.wallser.Data.ImageContract;
 
 public class Utility {
 
-    public static void saveImage(Bitmap bitmap, Context context) throws Exception {
+    public static boolean saveImage(Bitmap bitmap, Context context, String name) throws Exception {
         if (bitmap != null) {
             Log.d(context.getPackageName(), "Storing bitmap");
-            Random generator = new Random();
-            int n = 10000;
-            n = generator.nextInt(n);
-            String fname = "Image-" + n + ".jpg";
+            String fname = name + ".jpg";
             File root = Environment.getExternalStorageDirectory();
             File walserDirectory = new File(root, "Walser");
             if (!walserDirectory.exists())
                 walserDirectory.mkdirs();
-            File imageFile = new File(walserDirectory, fname);
-            Log.d(context.getPackageName(), "Image Path = " + imageFile.getPath());
+            String imageFinalPath = walserDirectory.getPath() + "/" + fname;
+            if (new File(imageFinalPath).exists()) return true;
+            else {
+                File imageFile = new File(walserDirectory, fname);
+                Log.d(context.getPackageName(), "Image Path = " + imageFile.getPath());
 
-            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
-            fileOutputStream.close();
+                FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
+                fileOutputStream.close();
 
-            //Manually, add file to gallery
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imageFile.getPath())));
+                //Manually, add file to gallery
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imageFile.getPath())));
+                return false;
+            }
         } else {
             Log.d(context.getPackageName(), "Null bitmap");
         }
-
+        return false;
     }
 
     public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String TABLE_NAME, String param1) {
@@ -90,7 +91,7 @@ public class Utility {
                 connection.connect();
                 InputStream inptStream = connection.getInputStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inptStream);
-                saveImage(getResizedBitmap(bitmap, 25, 25), context);
+                saveImage(getResizedBitmap(bitmap, 25, 25), context, "id of downloaded image");
             } catch (Exception e) {
                 e.printStackTrace();
             }

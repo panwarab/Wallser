@@ -136,7 +136,9 @@ public class ImageFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         try {
-                            Utility.saveImage(bitmap, getContext());
+                            if (Utility.saveImage(bitmap, getContext(), object.name))
+                                Toast.makeText(getContext(), "Image Present!!", Toast.LENGTH_SHORT).show();
+                            else
                             Toast.makeText(getContext(), "Download done!!", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Could not download!!", Toast.LENGTH_SHORT).show();
