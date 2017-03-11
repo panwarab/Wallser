@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import thenextvoyager.wallser.fragment.PageFragment;
 
@@ -13,9 +14,10 @@ import thenextvoyager.wallser.fragment.PageFragment;
 
 public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
+    private static final String TAG = SimpleFragmentPagerAdapter.class.getSimpleName();
     Context context;
     private int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[]{"Tab 1", "Tab 2"};
+    private String tabTitles[] = new String[]{"Latest", "Popular"};
 
 
     public SimpleFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -25,7 +27,8 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position + 1);
+        Log.d(TAG, "Pager currently set on " + position);
+        return PageFragment.newInstance(tabTitles[position]);
     }
 
     @Override
