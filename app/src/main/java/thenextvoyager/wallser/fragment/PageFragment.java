@@ -28,6 +28,7 @@ import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
+import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 import static thenextvoyager.wallser.Data.DataModel.model;
 
@@ -42,6 +43,10 @@ public class PageFragment extends Fragment {
     private static final String TAG = PageFragment.class.getSimpleName();
 
     RecyclerView recyclerView;
+    ImageAdapter imageAdapter;
+    boolean first_call = true;
+    GridLayoutManager layoutManager;
+    EndlessRecyclerViewScrollListener scrollListener;
     private int mPage;
 
     public static Fragment newInstance(int page) {
@@ -56,6 +61,14 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        layoutManager = new GridLayoutManager(getContext(), 2);
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.w(TAG, "On load More Called with page number " + page);
+                loadDataUsingVolley(page);
+            }
+        };
         mPage = getArguments().getInt(ARG_PAGE);
     }
 
@@ -71,18 +84,13 @@ public class PageFragment extends Fragment {
     }
 
     void setUpRecyclerView() {
-        recyclerView.setAdapter(new ImageAdapter(getContext(), model));
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        if (imageAdapter == null)
+            imageAdapter = new ImageAdapter(getContext(), model);
+        recyclerView.setAdapter(imageAdapter);
+
         recyclerView.setLayoutManager(layoutManager);
-     /*   recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+        recyclerView.addOnScrollListener(scrollListener);
 
-                loadDataUsingVolley(page);
-
-            }
-        });
-    */
     }
 
     void loadDataUsingVolley(int page) {
@@ -95,8 +103,8 @@ public class PageFragment extends Fragment {
             @Override
             public void onResponse(JSONArray array) {
                 int len = array.length();
+                if (model == null)
                 model = new ArrayList<>();
-
                 for (int i = 0; i < len; i++) {
                     try {
                         JSONObject object = array.getJSONObject(i);
@@ -116,8 +124,13 @@ public class PageFragment extends Fragment {
                     dialog.dismiss();
                 }
                 Log.d(TAG, model.size() + "");
-                if (model != null)
+                if (model != null && first_call) {
                     setUpRecyclerView();
+                    first_call = false;
+                } else {
+                    imageAdapter.notifyDataSetChanged();
+                }
+
             }
         }, new Response.ErrorListener() {
 
