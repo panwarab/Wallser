@@ -47,12 +47,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ImageAdapter.ViewHolder holder, final int position) {
 
-
-        ImageView imageView = holder.image;
         final Bundle args = new Bundle();
         args.putSerializable(MODEL_TAG, model);
         args.putInt(MODEL_TAG1, position);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ImageActivity.class);
@@ -61,7 +59,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             }
         });
 
-        Picasso.with(context).load(model.get(position).imageURL.trim()).error(R.drawable.sample).into(imageView);
+        Picasso.with(context).load(model.get(position).imageURL.trim()).error(R.drawable.sample).resize(200, 200).centerInside().into(holder.image);
 
 
     }

@@ -75,9 +75,13 @@ public class PageFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+            }
+
+       /*     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.w(TAG, "On load More Called with page number " + page);
                 loadDataUsingVolley(page);
-            }
+            }*/
         };
     }
 
@@ -88,7 +92,7 @@ public class PageFragment extends Fragment {
         loadDataUsingVolley(1);
         View view = inflater.inflate(R.layout.fragment_page, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-
+        recyclerView.setHasFixedSize(true);
         return view;
     }
 

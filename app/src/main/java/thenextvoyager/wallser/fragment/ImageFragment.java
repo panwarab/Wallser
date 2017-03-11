@@ -31,6 +31,10 @@ import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.utility.Utility;
 
+import static thenextvoyager.wallser.R.drawable.ic_favorite;
+import static thenextvoyager.wallser.R.drawable.ic_file_download;
+import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,25 +69,24 @@ public class ImageFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_image, container, false);
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.fragment_image);
         final FloatingActionButton downloadb = (FloatingActionButton) rootView.findViewById(R.id.download_button);
-        downloadb.setImageResource(R.drawable.ic_file_download);
+        downloadb.setImageResource(ic_file_download);
         final FloatingActionButton favoriteb = (FloatingActionButton) rootView.findViewById(R.id.favorite_button);
-        favoriteb.setImageResource(R.drawable.ic_favorite);
+        favoriteb.setImageResource(ic_favorite);
         final FloatingActionButton wallpaperb = (FloatingActionButton) rootView.findViewById(R.id.wallpaper_button);
-        wallpaperb.setImageResource(R.drawable.ic_wallpaper);
-
+        wallpaperb.setImageResource(ic_wallpaper);
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 Palette.generateAsync(bitmap, 3, new Palette.PaletteAsyncListener() {
                     @Override
                     public void onGenerated(Palette palette) {
-                        int color = palette.getDominantColor(Color.GREEN);
-                        if (color == Color.GREEN)
-                            color = palette.getVibrantColor(Color.GREEN);
-                        if (color == Color.GREEN)
-                            color = palette.getDarkVibrantColor(Color.GREEN);
-                        if (color == Color.GREEN)
-                            color = palette.getMutedColor(Color.GREEN);
+                        int color = palette.getDominantColor(Color.BLACK);
+                        if (color == Color.BLACK)
+                            color = palette.getVibrantColor(Color.BLACK);
+                        if (color == Color.BLACK)
+                            color = palette.getDarkVibrantColor(Color.BLACK);
+                        if (color == Color.BLACK)
+                            color = palette.getMutedColor(Color.BLACK);
 
                         downloadb.setBackgroundTintList(ColorStateList.valueOf(color));
                         favoriteb.setBackgroundTintList(ColorStateList.valueOf(color));

@@ -35,6 +35,7 @@ public class ImageActivity extends AppCompatActivity {
         viewPager.setAdapter(imagePager);
         viewPager.setCurrentItem(position);
 
+
     }
 
 
