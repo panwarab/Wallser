@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Constants constants = new Constants(getApplicationContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
+        toolbar.setNavigationIcon(R.drawable.ic_menu);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new SimpleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
