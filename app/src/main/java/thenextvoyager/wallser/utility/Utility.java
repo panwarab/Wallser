@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,16 +31,35 @@ import thenextvoyager.wallser.Data.ImageContract;
 
 public class Utility {
 
-    public static boolean saveImage(Bitmap bitmap, Context context, String name) throws Exception {
+    private static final String TAG = Utility.class.getSimpleName();
+    private static File walserDirectory;
+
+    /**
+     * Saves the image in disk or shares it via Intent; share variable defines the purpose.
+     *
+     * @param bitmap
+     * @param context
+     * @param name
+     * @param share
+     * @return wether operation completed succesfully or not
+     * @throws Exception
+     */
+    public static boolean saveImage(Bitmap bitmap, Context context, String name, boolean share) throws Exception {
         if (bitmap != null) {
             Log.d(context.getPackageName(), "Storing bitmap");
-            String fname = name + ".jpg";
+            String fname = name + ".jpeg";
             File root = Environment.getExternalStorageDirectory();
-            File walserDirectory = new File(root, "Walser");
+            walserDirectory = new File(root, "Walser");
             if (!walserDirectory.exists())
                 walserDirectory.mkdirs();
             String imageFinalPath = walserDirectory.getPath() + "/" + fname;
-            if (new File(imageFinalPath).exists()) return true;
+            if (new File(imageFinalPath).exists()) {
+                if (share) {
+                    File file = new File(imageFinalPath);
+                    deleteFileAfterShare(file, context);
+                }
+                return true;
+            }
             else {
                 File imageFile = new File(walserDirectory, fname);
                 Log.d(context.getPackageName(), "Image Path = " + imageFile.getPath());
@@ -47,15 +68,40 @@ public class Utility {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
                 fileOutputStream.close();
 
-                //Manually, add file to gallery
-                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imageFile.getPath())));
+                if (share)
+                    deleteFileAfterShare(imageFile, context);
+                else {
+                    //Manually, add file to gallery
+                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imageFile.getPath())));
+
+                }
                 return false;
             }
         } else {
             Log.d(context.getPackageName(), "Null bitmap");
+
         }
         return false;
     }
+
+    private static void deleteFileAfterShare(File file, Context context) {
+        if (file.exists()) {
+            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+            String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+            String type = mimeTypeMap.getMimeTypeFromExtension(ext);
+            Log.d(TAG, "Type  of data to share is " + type);
+            Intent shareintent = new Intent(Intent.ACTION_SEND);
+            shareintent.setType(type);
+            Log.d(TAG, "File URI " + Uri.fromFile(file));
+            shareintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            shareintent.putExtra(Intent.EXTRA_TEXT, "Hey! improve your phone wall with wallser!");
+            context.startActivity(Intent.createChooser(shareintent, "Share Using"));
+            //  file.delete();
+        } else {
+            Toast.makeText(context, "No image present!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String TABLE_NAME, String param1) {
         Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, new String[]{TABLE_NAME}, TABLE_NAME + " = ?", new String[]{param1}, null);
@@ -91,7 +137,7 @@ public class Utility {
                 connection.connect();
                 InputStream inptStream = connection.getInputStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inptStream);
-                saveImage(getResizedBitmap(bitmap, 25, 25), context, "id of downloaded image");
+                saveImage(getResizedBitmap(bitmap, 25, 25), context, "id of downloaded image",false);
             } catch (Exception e) {
                 e.printStackTrace();
             }

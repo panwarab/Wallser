@@ -9,7 +9,7 @@ import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.DataAdapter;
 
-public class FavoriteActivity extends AppCompatActivity {
+public class FavoritesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

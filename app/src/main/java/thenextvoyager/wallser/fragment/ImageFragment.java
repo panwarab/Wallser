@@ -77,6 +77,8 @@ public class ImageFragment extends Fragment {
         favoriteb.setImageResource(ic_favorite);
         final FloatingActionButton wallpaperb = (FloatingActionButton) rootView.findViewById(R.id.wallpaper_button);
         wallpaperb.setImageResource(ic_wallpaper);
+        ImageView close_button = (ImageView) rootView.findViewById(R.id.cross_button);
+        final ImageView share_button = (ImageView) rootView.findViewById(R.id.share_button);
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -143,7 +145,7 @@ public class ImageFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         try {
-                            if (Utility.saveImage(bitmap, getContext(), object.name))
+                            if (Utility.saveImage(bitmap, getContext(), object.name, false))
                                 Toast.makeText(getContext(), "Image Present!!", Toast.LENGTH_SHORT).show();
                             else
                             Toast.makeText(getContext(), "Download done!!", Toast.LENGTH_SHORT).show();
@@ -153,6 +155,16 @@ public class ImageFragment extends Fragment {
                         }
                     }
 
+                });
+                share_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            Utility.saveImage(bitmap, getContext(), object.name, true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 });
             }
 

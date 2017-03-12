@@ -23,7 +23,6 @@ public class ImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         final ArrayList<DataModel> model = (ArrayList<DataModel>) bundle.getSerializable(MODEL_TAG);
