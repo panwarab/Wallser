@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -42,9 +43,11 @@ import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
  * create an instance of this fragment.
  */
 public class ImageFragment extends Fragment {
+
     private static final String ARG_PARAM = "param2";
     private static final String TAG = ImageFragment.class.getSimpleName();
     DataModel object;
+    private FirebaseAnalytics analytics;
 
     public static ImageFragment newInstance(DataModel object) {
         ImageFragment fragment = new ImageFragment();
@@ -126,6 +129,7 @@ public class ImageFragment extends Fragment {
                 wallpaperb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        recordAnalyticsEvent(object.name, "image");
                         WallpaperManager wallpaperManager = WallpaperManager.getInstance(getContext());
                         try {
                             wallpaperManager.setBitmap(bitmap);
@@ -165,6 +169,14 @@ public class ImageFragment extends Fragment {
         Picasso.with(rootView.getContext()).load(object.imageURL.trim()).into(target);
 
         return rootView;
+    }
+
+    private void recordAnalyticsEvent(String name, String type) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
+        analytics = FirebaseAnalytics.getInstance(getContext());
+        analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
 }

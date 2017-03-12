@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "526122987655",
+    "firebase_url": "https://wallser-b4293.firebaseio.com",
+    "project_id": "wallser-b4293",
+    "storage_bucket": "wallser-b4293.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526122987655:android:4bd3c806120401c3",
+        "android_client_info": {
+          "package_name": "thenextvoyager.wallser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526122987655-jk5kdf9sj69tgduh7umo0cqfl5is52kp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "thenextvoyager.wallser",
+            "certificate_hash": "f39cad6404a0d8561e73d9f1090d15112be1a5c4"
+          }
+        },
+        {
+          "client_id": "526122987655-mllev9d036mj5fdhkoru7k0uud4bcrvo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3jsZZtwLc6S3fdgRK836qIdzTGD_mTzA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526122987655-mllev9d036mj5fdhkoru7k0uud4bcrvo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
