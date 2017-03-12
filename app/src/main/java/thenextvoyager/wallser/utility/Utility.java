@@ -91,12 +91,11 @@ public class Utility {
             String type = mimeTypeMap.getMimeTypeFromExtension(ext);
             Log.d(TAG, "Type  of data to share is " + type);
             Intent shareintent = new Intent(Intent.ACTION_SEND);
-            shareintent.setType(type);
+            shareintent.setType("*/*");
             Log.d(TAG, "File URI " + Uri.fromFile(file));
             shareintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             shareintent.putExtra(Intent.EXTRA_TEXT, "Hey! improve your phone wall with wallser!");
             context.startActivity(Intent.createChooser(shareintent, "Share Using"));
-            //  file.delete();
         } else {
             Toast.makeText(context, "No image present!", Toast.LENGTH_SHORT).show();
         }

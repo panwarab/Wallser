@@ -1,4 +1,4 @@
-package thenextvoyager.wallser.fragment;
+package thenextvoyager.wallser.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -9,18 +9,19 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import thenextvoyager.wallser.Data.DataModel;
+import thenextvoyager.wallser.fragment.ImageFragment;
 
 /**
  * Created by Abhiroj on 3/7/2017.
  */
 
-public class ImagePager extends FragmentPagerAdapter {
+public class ImagePagerAdapter extends FragmentPagerAdapter {
 
-    private static final String TAG = ImagePager.class.getSimpleName();
+    private static final String TAG = ImagePagerAdapter.class.getSimpleName();
     Context context;
     ArrayList<DataModel> model;
 
-    public ImagePager(FragmentManager fm, ArrayList<DataModel> model, Context context) {
+    public ImagePagerAdapter(FragmentManager fm, ArrayList<DataModel> model, Context context) {
         super(fm);
         this.context = context;
         this.model = model;

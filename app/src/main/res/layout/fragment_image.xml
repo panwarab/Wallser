@@ -36,10 +36,10 @@
 
 
     <LinearLayout
+        android:id="@+id/fab_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="?android:attr/actionBarSize"
         android:orientation="horizontal">
 
         <android.support.design.widget.FloatingActionButton
@@ -48,12 +48,16 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             app:fabSize="auto" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/download_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_margin="2dp"
             android:padding="10dp"
             app:fabSize="auto" />
@@ -63,6 +67,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:padding="10dp"
             app:fabSize="auto" />
 

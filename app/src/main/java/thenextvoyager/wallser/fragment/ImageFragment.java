@@ -78,6 +78,15 @@ public class ImageFragment extends Fragment {
         final FloatingActionButton wallpaperb = (FloatingActionButton) rootView.findViewById(R.id.wallpaper_button);
         wallpaperb.setImageResource(ic_wallpaper);
         ImageView close_button = (ImageView) rootView.findViewById(R.id.cross_button);
+        close_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getActivity().finish();
+                    }
+                }
+        );
+
         final ImageView share_button = (ImageView) rootView.findViewById(R.id.share_button);
         Target target = new Target() {
             @Override

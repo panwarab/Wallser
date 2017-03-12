@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
-import thenextvoyager.wallser.fragment.ImagePager;
+import thenextvoyager.wallser.adapter.ImagePagerAdapter;
 
 
 public class ImageActivity extends AppCompatActivity {
@@ -30,8 +30,8 @@ public class ImageActivity extends AppCompatActivity {
 
         Log.d(TAG, model + "");
         ViewPager viewPager = (ViewPager) findViewById(R.id.image_pager);
-        final ImagePager imagePager = new ImagePager(getSupportFragmentManager(), model, this);
-        viewPager.setAdapter(imagePager);
+        final ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(getSupportFragmentManager(), model, this);
+        viewPager.setAdapter(imagePagerAdapter);
         viewPager.setCurrentItem(position);
 
 
