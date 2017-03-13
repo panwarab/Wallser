@@ -2,6 +2,7 @@ package thenextvoyager.wallser.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import thenextvoyager.wallser.viewholder.ViewHolder;
  */
 
 public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
+    private static final String TAG = FavoritesAdapter.class.getSimpleName();
     Context context;
     Cursor cursor;
 
@@ -26,10 +28,6 @@ public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
         this.cursor = cursor;
     }
 
-    @Override
-    public int getItemCount() {
-        return (cursor != null) ? cursor.getCount() : 0;
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,6 +44,7 @@ public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         int pos = viewHolder.getAdapterPosition();
         cursor.moveToPosition(pos);
+        Log.d(TAG, "Adapter position = " + pos);
         Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).resize(100, 100).centerCrop().into(viewHolder.image);
     }
 

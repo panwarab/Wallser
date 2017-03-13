@@ -44,7 +44,7 @@ public class FavoritesFragment extends Fragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            Log.d(TAG, "Load Reset");
+            Log.d(TAG, "Loader Reset");
             favoritesAdapter.swapCursor(null);
         }
     };
@@ -63,6 +63,7 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.d(TAG, "View Created");
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         view1 = (RecyclerView) view.findViewById(R.id.recyclerview_favorite);
         view1.setLayoutManager(new GridLayoutManager(getContext(), 2));
