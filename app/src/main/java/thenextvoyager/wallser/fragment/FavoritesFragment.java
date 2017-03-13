@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.FavoritesAdapter;
@@ -37,12 +38,8 @@ public class FavoritesFragment extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.d(TAG, "Load Finished");
-            if (favoritesAdapter == null)
-                favoritesAdapter = new FavoritesAdapter(getContext(), data);
-            view1.setAdapter(favoritesAdapter);
+            Log.d(TAG, "Load Finished , Cursor count -->" + data.getCount());
             favoritesAdapter.swapCursor(data);
-            favoritesAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -57,13 +54,20 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().initLoader(Constants.CURSOR_LOADER_MANAGER, null, loaderCallbacks);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         view1 = (RecyclerView) view.findViewById(R.id.recyclerview_favorite);
         view1.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        getLoaderManager().initLoader(0, null, loaderCallbacks);
+        favoritesAdapter = new FavoritesAdapter(getContext(), null);
+        view1.setAdapter(favoritesAdapter);
         return view;
     }
 

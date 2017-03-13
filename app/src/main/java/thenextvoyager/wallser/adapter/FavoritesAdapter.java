@@ -19,6 +19,7 @@ import thenextvoyager.wallser.viewholder.ViewHolder;
 public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
     Context context;
     Cursor cursor;
+
     public FavoritesAdapter(Context context, Cursor cursor) {
         super(context, cursor);
         this.context = context;
@@ -33,7 +34,6 @@ public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.displayimage, parent, false);
-
         return new ViewHolder(view);
     }
 
