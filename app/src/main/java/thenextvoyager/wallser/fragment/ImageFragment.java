@@ -25,6 +25,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
 import java.io.IOException;
 
 import thenextvoyager.wallser.Data.DataModel;
@@ -45,14 +46,17 @@ import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
 public class ImageFragment extends Fragment {
 
     private static final String ARG_PARAM = "param2";
+    private static final String ARG_PARAM1 = "param1";
     private static final String TAG = ImageFragment.class.getSimpleName();
     DataModel object;
+    String filePath;
     private FirebaseAnalytics analytics;
 
-    public static ImageFragment newInstance(DataModel object) {
+    public static ImageFragment newInstance(DataModel object, String filePath) {
         ImageFragment fragment = new ImageFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM, object);
+        args.putString(ARG_PARAM1, filePath);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,6 +66,7 @@ public class ImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             object = (DataModel) getArguments().getSerializable(ARG_PARAM);
+            filePath = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -88,6 +93,19 @@ public class ImageFragment extends Fragment {
         );
 
         final ImageView share_button = (ImageView) rootView.findViewById(R.id.share_button);
+
+        if (object != null) {
+            picasso(imageView, downloadb, favoriteb, wallpaperb, share_button, rootView);
+        }
+        if (filePath != null) {
+            downloadb.setVisibility(View.INVISIBLE);
+            picasso(imageView, favoriteb, wallpaperb, share_button, rootView);
+        }
+
+        return rootView;
+    }
+
+    private void picasso(final ImageView imageView, final FloatingActionButton downloadb, final FloatingActionButton favoriteb, final FloatingActionButton wallpaperb, final ImageView share_button, View rootView) {
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -157,7 +175,7 @@ public class ImageFragment extends Fragment {
                             if (Utility.saveImage(bitmap, getContext(), object.name, false))
                                 Toast.makeText(getContext(), "Image Present!!", Toast.LENGTH_SHORT).show();
                             else
-                            Toast.makeText(getContext(), "Download done!!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Download done!!", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Could not download!!", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
@@ -188,8 +206,93 @@ public class ImageFragment extends Fragment {
             }
         };
         Picasso.with(rootView.getContext()).load(object.imageURL.trim()).into(target);
+    }
 
-        return rootView;
+    private void picasso(final ImageView imageView, final FloatingActionButton favoriteb, final FloatingActionButton wallpaperb, final ImageView share_button, View rootView) {
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                Palette.generateAsync(bitmap, 3, new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        int color = palette.getDominantColor(Color.BLACK);
+                        if (color == Color.BLACK)
+                            color = palette.getVibrantColor(Color.BLACK);
+                        if (color == Color.BLACK)
+                            color = palette.getDarkVibrantColor(Color.BLACK);
+                        if (color == Color.BLACK)
+                            color = palette.getMutedColor(Color.BLACK);
+
+                        favoriteb.setBackgroundTintList(ColorStateList.valueOf(color));
+                        wallpaperb.setBackgroundTintList(ColorStateList.valueOf(color));
+                    }
+                });
+                imageView.setImageBitmap(bitmap);
+                favoriteb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Uri uri = ImageContract.ImageEntry.CONTENT_URI;
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(ImageContract.ImageEntry.COLUMN_NAME, object.name);
+                        contentValues.put(ImageContract.ImageEntry.COLUMN_REGURL, object.imageURL);
+                        contentValues.put(ImageContract.ImageEntry.COLUMN_DLDURL, object.downloadURL);
+                        try {
+                            ContentResolver resolver = getContext().getContentResolver();
+                            if (!(Utility.checkIfImageIsInDatabase(resolver, ImageContract.ImageEntry.COLUMN_NAME, object.name))) {
+                                resolver.insert(uri, contentValues);
+                                Cursor cursor = resolver.query(uri, new String[]{ImageContract.ImageEntry.COLUMN_NAME, ImageContract.ImageEntry.COLUMN_DLDURL, ImageContract.ImageEntry.COLUMN_REGURL}, null, null, null);
+                                if (cursor != null) {
+                                    cursor.moveToFirst();
+                                    do {
+                                        Log.d(TAG, "Cursor data : Name " + cursor.getString(0) + "\n");
+                                        if (cursor.isAfterLast()) break;
+                                    } while ((cursor.moveToNext()));
+                                }
+                                cursor.close();
+                            } else {
+                                Toast.makeText(getContext(), "Image present", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Error error) {
+                            Log.e(TAG, "Insert failed due to " + error.getCause());
+                        }
+                    }
+                });
+                wallpaperb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        recordAnalyticsEvent(object.name, "image");
+                        WallpaperManager wallpaperManager = WallpaperManager.getInstance(getContext());
+                        try {
+                            wallpaperManager.setBitmap(bitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getContext(), "Wallpapaer Set!!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                share_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            Utility.saveImage(bitmap, getContext(), object.name, true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                imageView.setImageDrawable(errorDrawable);
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        Picasso.with(rootView.getContext()).load(new File(filePath)).into(target);
     }
 
     private void recordAnalyticsEvent(String name, String type) {

@@ -34,19 +34,13 @@
 
         <activity android:name=".activity.FavoriteActivity" />
         <activity
-            android:name=".activity.DownloadsActivity"
-            android:label="@string/title_activity_downloads"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.displayImage"
+            android:label="@string/title_activity_display_image"
+            android:parentActivityName=".activity.DownloadsActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="thenextvoyager.wallser.activity.MainActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                android:value="thenextvoyager.wallser.activity.DownloadsActivity" />
         </activity>
     </application>
 

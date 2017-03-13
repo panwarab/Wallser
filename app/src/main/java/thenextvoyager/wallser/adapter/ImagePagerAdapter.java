@@ -30,7 +30,7 @@ public class ImagePagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Log.d(TAG, position + " position in getItem");
-        return ImageFragment.newInstance(model.get(position));
+        return ImageFragment.newInstance(model.get(position), null);
     }
 
 

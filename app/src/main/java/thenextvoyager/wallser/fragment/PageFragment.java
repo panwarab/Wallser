@@ -3,6 +3,7 @@ package thenextvoyager.wallser.fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
+import thenextvoyager.wallser.callback.sortcallback;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 import static thenextvoyager.wallser.Data.Constants.api_key;
@@ -36,41 +39,34 @@ import static thenextvoyager.wallser.Data.Constants.api_key;
  * Created by Abhiroj on 3/3/2017.
  */
 
-public class PageFragment extends Fragment {
+public class PageFragment extends Fragment implements sortcallback {
 
-    public static final String ARG_PAGE = "ARG_PAGE";
     private static final String TAG = PageFragment.class.getSimpleName();
     /**
      * Unsplash API, By Default=10
      */
     private static final String per_page = "10";
+    public static String order_By;
     /**
      * Unsplash API call parameter, By Default=latest
      * Change it in Pager Fragment, based on Tab tapped
      */
-    public String order_By = "latest";
     RecyclerView recyclerView;
     ImageAdapter imageAdapter;
-    boolean first_call = true;
     GridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
     private ArrayList<DataModel> model;
 
-    public static Fragment newInstance(String callFor) {
-        Log.d(TAG, "Instantiating " + callFor + " Fragment");
-        Bundle args = new Bundle();
-        args.putString(ARG_PAGE, callFor);
-        PageFragment fragment = new PageFragment();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("ORDER_BY", order_By);
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        order_By = ((getArguments().getString(ARG_PAGE) == "Popular") ? "popular" : "latest");
-            Log.d(TAG, "Ordering the results by " + order_By);
+
         layoutManager = new GridLayoutManager(getContext(), 2);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -87,10 +83,24 @@ public class PageFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, final Bundle savedInstanceState) {
 
-        loadDataUsingVolley(1);
+        if (savedInstanceState != null) {
+            loadDataUsingVolley(1, savedInstanceState.getString("ORDER_BY"));
+        } else {
+            order_By = "latest";
+            loadDataUsingVolley(1, order_By);
+        }
         View view = inflater.inflate(R.layout.fragment_page, container, false);
+        FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.sort_button);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SortDialog sortDialog = new SortDialog();
+                sortDialog.setTargetFragment(sortDialog, 911);
+                sortDialog.show(getChildFragmentManager(), "sortfragment");
+            }
+        });
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         return view;
@@ -106,11 +116,11 @@ public class PageFragment extends Fragment {
 
     }
 
-    void loadDataUsingVolley(int page) {
+    void loadDataUsingVolley(int page, String order_by) {
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
         dialog.show();
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_By;
+        String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
         Log.d(TAG, URL);
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
@@ -137,21 +147,24 @@ public class PageFragment extends Fragment {
                     dialog.dismiss();
                 }
                 Log.d(TAG, model.size() + "");
-                if (model != null && first_call) {
                     setUpRecyclerView();
-                    first_call = false;
-                } else {
-                    imageAdapter.notifyDataSetChanged();
-                }
+
 
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                dialog.dismiss();
+                Toast.makeText(getContext(), "" + error.getCause(), Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(objectRequest);
+    }
+
+    @Override
+    public void onDialogFinish(String order_by) {
+        order_By = order_by;
+        loadDataUsingVolley(1, order_By);
     }
 }

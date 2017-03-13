@@ -1,16 +1,27 @@
 package thenextvoyager.wallser.activity;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.SimpleFragmentPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,5 +40,32 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        setUpNavigationView();
+    }
+
+    private void setUpNavigationView() {
+        View view = navigationView.inflateHeaderView(R.layout.nav_header);
+        TextView header = (TextView) view.findViewById(R.id.location_textview);
+        header.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Medium.ttf"));
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectedDrawerItem(item);
+                return false;
+            }
+        });
+    }
+
+    void selectedDrawerItem(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.favorites:
+                Toast.makeText(this, "Favorites activity code here", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.downloads:
+                Toast.makeText(this, "Download activity code here", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

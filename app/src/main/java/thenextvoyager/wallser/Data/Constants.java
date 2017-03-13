@@ -10,6 +10,7 @@ import thenextvoyager.wallser.R;
 
 public class Constants {
 
+    public static final String IMAGE_PASS_KEY = "image_one_pass";
     public static String api_key;
     Context context;
 
