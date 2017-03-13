@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
-import thenextvoyager.wallser.callback.sortcallback;
+import thenextvoyager.wallser.callback.SortDialogCallback;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 import static thenextvoyager.wallser.Data.Constants.api_key;
@@ -39,7 +39,7 @@ import static thenextvoyager.wallser.Data.Constants.api_key;
  * Created by Abhiroj on 3/3/2017.
  */
 
-public class PageFragment extends Fragment implements sortcallback {
+public class PageFragment extends Fragment implements SortDialogCallback {
 
     private static final String TAG = PageFragment.class.getSimpleName();
     /**

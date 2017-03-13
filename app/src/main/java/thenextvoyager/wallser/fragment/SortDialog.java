@@ -16,7 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import thenextvoyager.wallser.R;
-import thenextvoyager.wallser.callback.sortcallback;
+import thenextvoyager.wallser.callback.SortDialogCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +71,7 @@ public class SortDialog extends DialogFragment {
     }
 
     public void sendBackResult(String order_by) {
-        sortcallback callback = (sortcallback) getTargetFragment();
+        SortDialogCallback callback = (SortDialogCallback) getTargetFragment();
         callback.onDialogFinish(order_by);
         dismiss();
     }
