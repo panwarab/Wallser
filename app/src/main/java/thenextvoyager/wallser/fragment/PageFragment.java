@@ -69,15 +69,11 @@ public class PageFragment extends Fragment implements SortDialogCallback {
 
         layoutManager = new GridLayoutManager(getContext(), 2);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
+
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
-            }
-
-       /*     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.w(TAG, "On load More Called with page number " + page);
-                loadDataUsingVolley(page);
-            }*/
+                loadDataUsingVolley(page, order_By);
+            }
         };
     }
 

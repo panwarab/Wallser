@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpNavigationView() {
         View view = navigationView.inflateHeaderView(R.layout.nav_header);
         TextView header = (TextView) view.findViewById(R.id.location_textview);
+        header.setText(R.string.app_name);
         header.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Medium.ttf"));
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

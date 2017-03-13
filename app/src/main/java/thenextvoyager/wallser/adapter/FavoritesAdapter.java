@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.utility.CursorRecyclerViewAdapter;
 import thenextvoyager.wallser.viewholder.ViewHolder;
 
 /**

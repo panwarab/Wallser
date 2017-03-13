@@ -49,7 +49,7 @@ public class Utility {
             Log.d(context.getPackageName(), "Storing bitmap");
             String fname = name + ".jpeg";
             File root = Environment.getExternalStorageDirectory();
-            walserDirectory = new File(root, "Walser");
+            walserDirectory = new File(root, "Wallser");
             if (!walserDirectory.exists())
                 walserDirectory.mkdirs();
             String imageFinalPath = walserDirectory.getPath() + "/" + fname;

@@ -1,4 +1,4 @@
-package thenextvoyager.wallser.adapter;
+package thenextvoyager.wallser.utility;
 
 import android.content.Context;
 import android.database.Cursor;
