@@ -97,7 +97,7 @@ public class PageFragment extends Fragment implements sortcallback {
             @Override
             public void onClick(View view) {
                 SortDialog sortDialog = new SortDialog();
-                sortDialog.setTargetFragment(sortDialog, 911);
+                sortDialog.setTargetFragment(PageFragment.this, 911);
                 sortDialog.show(getChildFragmentManager(), "sortfragment");
             }
         });
@@ -110,10 +110,8 @@ public class PageFragment extends Fragment implements sortcallback {
         if (imageAdapter == null)
             imageAdapter = new ImageAdapter(getContext(), model);
         recyclerView.setAdapter(imageAdapter);
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(scrollListener);
-
     }
 
     void loadDataUsingVolley(int page, String order_by) {
@@ -147,7 +145,7 @@ public class PageFragment extends Fragment implements sortcallback {
                     dialog.dismiss();
                 }
                 Log.d(TAG, model.size() + "");
-                    setUpRecyclerView();
+                setUpRecyclerView();
 
 
             }
@@ -156,14 +154,23 @@ public class PageFragment extends Fragment implements sortcallback {
             @Override
             public void onErrorResponse(VolleyError error) {
                 dialog.dismiss();
-                Toast.makeText(getContext(), "" + error.getCause(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(objectRequest);
     }
 
+    /**
+     * marks a new network call to Unsplash API
+     * Thus, set model array list to null, to start fresh.
+     * as model is reset, ImageAdapter also needs to start fresh.
+     *
+     * @param order_by
+     */
     @Override
     public void onDialogFinish(String order_by) {
+        model = null;
+        imageAdapter=null;
         order_By = order_by;
         loadDataUsingVolley(1, order_By);
     }

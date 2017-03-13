@@ -71,8 +71,8 @@ public class SortDialog extends DialogFragment {
     }
 
     public void sendBackResult(String order_by) {
-        sortcallback sortcallback = (sortcallback) getTargetFragment();
-        sortcallback.onDialogFinish(order_by);
+        sortcallback callback = (sortcallback) getTargetFragment();
+        callback.onDialogFinish(order_by);
         dismiss();
     }
 
