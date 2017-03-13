@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
@@ -16,12 +15,13 @@ import java.util.ArrayList;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.activity.ImageActivity;
+import thenextvoyager.wallser.viewholder.ViewHolder;
 
 /**
  * Created by Abhiroj on 3/4/2017.
  */
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private static final String MODEL_TAG = "data_model";
     private static final String MODEL_TAG1 = "pos";
@@ -35,7 +35,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
 
     @Override
-    public ImageAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.displayimage, parent, false);
@@ -45,7 +45,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final ImageAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         final Bundle args = new Bundle();
         args.putSerializable(MODEL_TAG, model);
@@ -61,24 +61,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         Picasso.with(context).load(model.get(position).imageURL.trim()).error(R.drawable.sample).resize(200, 200).centerInside().into(holder.image);
 
-
     }
+
 
     @Override
     public int getItemCount() {
         return model.size();
     }
 
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public ImageView image;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            image = (ImageView) itemView.findViewById(R.id.image);
-        }
-
-    }
 }
