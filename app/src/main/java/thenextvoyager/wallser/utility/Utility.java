@@ -187,7 +187,7 @@ public class Utility {
             super.onPostExecute(aVoid);
             dialog.dismiss();
         }
-
-
     }
+
+
 }

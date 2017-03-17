@@ -7,8 +7,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -77,6 +80,11 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         };
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, final Bundle savedInstanceState) {
@@ -88,6 +96,10 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             loadDataUsingVolley(1, order_By);
         }
         View view = inflater.inflate(R.layout.fragment_page, container, false);
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+
         FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.sort_button);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
