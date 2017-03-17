@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -81,8 +82,20 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                Toast.makeText(getContext(), "Async task", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(getContext(), "Invalid Options", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_page_fragment, menu);
     }
 
     @Nullable
