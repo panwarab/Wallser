@@ -102,10 +102,18 @@ public class Utility {
     }
 
 
-    public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String TABLE_NAME, String param1) {
-        Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, new String[]{TABLE_NAME}, TABLE_NAME + " = ?", new String[]{param1}, null);
+    public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String COLUMN_NAME, String param1) {
+        Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, new String[]{COLUMN_NAME}, COLUMN_NAME + " = ?", new String[]{param1}, null);
         return cursor.getCount() > 0;
     }
+
+    public static boolean queryDatabaseForImageCount(ContentResolver resolver) {
+        Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, null, null, null, null);
+        if (cursor != null)
+            return cursor.getCount() > 0;
+        return false;
+    }
+
 
     /**
      * Created by Abhiroj on 3/8/2017.
