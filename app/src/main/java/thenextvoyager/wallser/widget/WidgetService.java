@@ -64,7 +64,9 @@ public class WidgetService extends RemoteViewsService {
             Log.d(TAG, "Cursor is at " + cursor.getPosition());
             final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_item);
             try {
-                Bitmap bitmap = Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).error(R.drawable.sample).resize(110, 110).get();
+                Picasso picasso = Picasso.with(context);
+                picasso.setLoggingEnabled(true);
+                Bitmap bitmap = picasso.load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).error(R.drawable.sample).get();
                 remoteViews.setImageViewBitmap(R.id.wid_image, bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -84,7 +86,7 @@ public class WidgetService extends RemoteViewsService {
 
         @Override
         public long getItemId(int i) {
-            return 0;
+            return 1;
         }
 
         @Override

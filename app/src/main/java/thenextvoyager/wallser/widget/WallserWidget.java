@@ -23,7 +23,7 @@ public class WallserWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.wallser_widget);
         views.setRemoteAdapter(R.id.widget_container, intent);
-        views.setEmptyView(appWidgetId, R.id.empty_view_container);
+        views.setEmptyView(R.id.widget_container, R.id.empty_view_container);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
