@@ -1,12 +1,8 @@
 <resources>
     <string name="app_name">Wallser</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_downloads">DownloadsActivity</string>
     <string name="title_activity_display_image">displayImage</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="empty_view_message">You do not have any favorite images yet</string>
-
+    <string name="empty_view_message">You do not have any favorite images yet!</string>
 </resources>
