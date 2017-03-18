@@ -107,14 +107,6 @@ public class Utility {
         return cursor.getCount() > 0;
     }
 
-    public static boolean queryDatabaseForImageCount(ContentResolver resolver) {
-        Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, null, null, null, null);
-        if (cursor != null)
-            return cursor.getCount() > 0;
-        return false;
-    }
-
-
     /**
      * Created by Abhiroj on 3/8/2017.
      */

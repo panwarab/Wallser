@@ -25,7 +25,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.File;
 import java.io.IOException;
 
 import thenextvoyager.wallser.Data.DataModel;
@@ -46,17 +45,14 @@ import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
 public class ImageFragment extends Fragment {
 
     private static final String ARG_PARAM = "param2";
-    private static final String ARG_PARAM1 = "param1";
     private static final String TAG = ImageFragment.class.getSimpleName();
     DataModel object;
-    String filePath;
     private FirebaseAnalytics analytics;
 
-    public static ImageFragment newInstance(DataModel object, String filePath) {
+    public static ImageFragment newInstance(DataModel object) {
         ImageFragment fragment = new ImageFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM, object);
-        args.putString(ARG_PARAM1, filePath);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +62,6 @@ public class ImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             object = (DataModel) getArguments().getSerializable(ARG_PARAM);
-            filePath = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -96,10 +91,6 @@ public class ImageFragment extends Fragment {
 
         if (object != null) {
             picasso(imageView, downloadb, favoriteb, wallpaperb, share_button, rootView);
-        }
-        if (filePath != null) {
-            downloadb.setVisibility(View.INVISIBLE);
-            picasso(imageView, favoriteb, wallpaperb, share_button, rootView);
         }
 
         return rootView;
@@ -292,7 +283,6 @@ public class ImageFragment extends Fragment {
 
             }
         };
-        Picasso.with(rootView.getContext()).load(new File(filePath)).into(target);
     }
 
     private void recordAnalyticsEvent(String name, String type) {

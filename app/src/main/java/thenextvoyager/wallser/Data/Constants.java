@@ -12,6 +12,8 @@ public class Constants {
 
     public static final String IMAGE_PASS_KEY = "image_one_pass";
     public static final int CURSOR_LOADER_MANAGER = 1;
+    public static final String MODEL_TAG = "1";
+    public static final String IMAGE_FRAGMENT_TAG = "2";
     public static String api_key;
     Context context;
 

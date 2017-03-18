@@ -17,14 +17,15 @@ import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.activity.ImageActivity;
 import thenextvoyager.wallser.viewholder.ViewHolder;
 
+import static thenextvoyager.wallser.Data.Constants.MODEL_TAG;
+
 /**
  * Created by Abhiroj on 3/4/2017.
  */
 
 public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    private static final String MODEL_TAG = "data_model";
-    private static final String MODEL_TAG1 = "pos";
+
     Context context;
     ArrayList<DataModel> model;
 
@@ -48,8 +49,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         final Bundle args = new Bundle();
-        args.putSerializable(MODEL_TAG, model);
-        args.putInt(MODEL_TAG1, position);
+        args.putSerializable(MODEL_TAG, model.get(position)); // Passing the current item
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
