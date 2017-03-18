@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.Data.ImageContract;
 
 
@@ -105,6 +106,14 @@ public class Utility {
     public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String COLUMN_NAME, String param1) {
         Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, new String[]{COLUMN_NAME}, COLUMN_NAME + " = ?", new String[]{param1}, null);
         return cursor.getCount() > 0;
+    }
+
+    public static DataModel makeDataModelFromCursor(Cursor cursor) {
+        String imageURL = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL));
+        String downloaURL = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_DLDURL));
+        String imageId = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_NAME));
+
+        return new DataModel(imageURL, downloaURL, imageId);
     }
 
     /**
