@@ -4,7 +4,6 @@
     android:initialLayout="@layout/wallser_widget"
     android:minHeight="110dp"
     android:minWidth="110dp"
-    android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="300"
     android:widgetCategory="home_screen"></appwidget-provider>

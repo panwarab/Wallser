@@ -10,6 +10,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
+    <include layout="@layout/no_internet_layout" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sort_button"
         android:layout_width="wrap_content"

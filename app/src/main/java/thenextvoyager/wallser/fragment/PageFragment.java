@@ -2,12 +2,12 @@ package thenextvoyager.wallser.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,7 +37,9 @@ import thenextvoyager.wallser.adapter.ImageAdapter;
 import thenextvoyager.wallser.callback.SortDialogCallback;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
+import static thenextvoyager.wallser.Data.Constants.HANDLER_DELAY_TIME;
 import static thenextvoyager.wallser.Data.Constants.api_key;
+import static thenextvoyager.wallser.utility.Utility.detectConnection;
 
 
 /**
@@ -59,7 +62,33 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     ImageAdapter imageAdapter;
     GridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
+    FloatingActionButton actionButton;
+    FrameLayout no_internet_container;
+    Bundle savedInstanceState;
+    // Attaching Handler to the main thread
+    Handler handler = new Handler();
+    boolean shouldHandlerRunAgain = true;
     private ArrayList<DataModel> model;
+    /**
+     * Handler is attached to the Main Thread and it's message queue, because it is the one who created it.
+     * <p>
+     * Handler is responsible for checking every second that are we connected to internet, and if we are, then :-
+     * 1. Then we remove empty view
+     * 2. Make the network call
+     * 3. Stop handler from posting the code again using shouldHandlerRunAgain variable
+     * 3.1 This is a kill switch otherwise handler will post the runnable again and again to the message queue, which will be executed as soon as it reaches the looper
+     * <p>
+     * Handler removeCallbacks is used to remove all the pending runnables  in the Message Queue
+     */
+    Runnable job = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "Thread run " + job.hashCode());
+            swapViews();
+            if (shouldHandlerRunAgain)
+                handler.postDelayed(job, HANDLER_DELAY_TIME);
+        }
+    };
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -68,9 +97,15 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        handler.post(job);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "Starting Handler");
         layoutManager = new GridLayoutManager(getContext(), 2);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
@@ -98,22 +133,36 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         inflater.inflate(R.menu.menu_page_fragment, menu);
     }
 
+
+    private void swapViews() {
+        if (detectConnection(getContext()) == false) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            actionButton.setVisibility(View.INVISIBLE);
+            no_internet_container.setVisibility(View.VISIBLE);
+        } else {
+            Log.d(TAG, "Removing callbacks from handler and stopping it from posting");
+            shouldHandlerRunAgain = false;
+            handler.removeCallbacks(job, null);
+            recyclerView.setVisibility(View.VISIBLE);
+            actionButton.setVisibility(View.VISIBLE);
+            no_internet_container.setVisibility(View.INVISIBLE);
+            if (savedInstanceState != null) {
+                loadDataUsingVolley(1, savedInstanceState.getString("ORDER_BY"));
+            } else {
+                order_By = "latest";
+                loadDataUsingVolley(1, order_By);
+            }
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, final Bundle savedInstanceState) {
 
-        if (savedInstanceState != null) {
-            loadDataUsingVolley(1, savedInstanceState.getString("ORDER_BY"));
-        } else {
-            order_By = "latest";
-            loadDataUsingVolley(1, order_By);
-        }
+        this.savedInstanceState = savedInstanceState;
         View view = inflater.inflate(R.layout.fragment_page, container, false);
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-
-
-        FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.sort_button);
+        actionButton = (FloatingActionButton) view.findViewById(R.id.sort_button);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,8 +171,11 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 sortDialog.show(getChildFragmentManager(), "sortfragment");
             }
         });
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
+        no_internet_container = (FrameLayout) view.findViewById(R.id.no_internet_container);
+
         return view;
     }
 
