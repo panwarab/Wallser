@@ -99,6 +99,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onResume() {
         super.onResume();
+        if (handler != null)
         handler.post(job);
     }
 
@@ -114,6 +115,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 loadDataUsingVolley(page, order_By);
             }
         };
+
     }
 
     @Override
@@ -143,6 +145,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             Log.d(TAG, "Removing callbacks from handler and stopping it from posting");
             shouldHandlerRunAgain = false;
             handler.removeCallbacks(job, null);
+            handler = null;
             recyclerView.setVisibility(View.VISIBLE);
             actionButton.setVisibility(View.VISIBLE);
             no_internet_container.setVisibility(View.INVISIBLE);

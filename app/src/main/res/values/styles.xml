@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <!-- Custom theme to set Nav Bar and Status Bar transparent (Incase of API 21 and above) or Translucent (Incase of API 19 and above) -->

@@ -6,4 +6,5 @@
     <string name="add_widget">Add widget</string>
     <string name="empty_view_message">You do not have any favorite images yet!</string>
     <string name="no_internet_message">Please connect to internet and try again!</string>
+    <string name="transition_name">shared_image</string>
 </resources>

@@ -28,7 +28,6 @@ public class ImageActivity extends AppCompatActivity {
 
         ImageFragment fragment = ImageFragment.newInstance(object);
         getSupportFragmentManager().beginTransaction().add(R.id.image_frag_container, fragment, IMAGE_FRAGMENT_TAG).commitAllowingStateLoss();
-
     }
 
 

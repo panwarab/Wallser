@@ -193,10 +193,10 @@ public class ImageFragment extends Fragment {
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-
+                imageView.setImageDrawable(placeHolderDrawable);
             }
         };
-        Picasso.with(rootView.getContext()).load(object.imageURL.trim()).into(target);
+        Picasso.with(rootView.getContext()).load(object.imageURL.trim()).error(R.drawable.sample).placeholder(R.drawable.sample).into(target);
     }
 
 

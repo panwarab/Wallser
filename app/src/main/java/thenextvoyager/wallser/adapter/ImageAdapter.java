@@ -1,12 +1,15 @@
 package thenextvoyager.wallser.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
@@ -46,16 +49,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         final Bundle args = new Bundle();
+        final ImageView imageView = holder.image;
         args.putSerializable(MODEL_TAG, model.get(position)); // Passing the current item
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ImageActivity.class);
                 intent.putExtras(args);
-                view.getContext().startActivity(intent);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) view.getContext(), imageView, "shared_image");
+                view.getContext().startActivity(intent, options.toBundle());
             }
         });
 
