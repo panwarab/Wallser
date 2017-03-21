@@ -1,9 +1,11 @@
 package thenextvoyager.wallser.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +53,7 @@ public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(final ViewHolder viewHolder, Cursor cursor) {
         int pos = viewHolder.getAdapterPosition();
         cursor.moveToPosition(pos);
 
@@ -63,7 +65,8 @@ public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), ImageActivity.class);
                 i.putExtras(args);
-                view.getContext().startActivity(i);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) view.getContext(), viewHolder.image, "shared_image");
+                view.getContext().startActivity(i, options.toBundle());
             }
         });
         Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).resize(100, 100).centerCrop().into(viewHolder.image);

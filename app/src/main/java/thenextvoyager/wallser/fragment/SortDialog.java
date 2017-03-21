@@ -23,9 +23,11 @@ import thenextvoyager.wallser.callback.SortDialogCallback;
  */
 public class SortDialog extends DialogFragment {
 
+
     public SortDialog() {
         // Required empty public constructor
     }
+
 
     @NonNull
     @Override

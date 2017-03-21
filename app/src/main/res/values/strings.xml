@@ -4,7 +4,16 @@
     <string name="title_activity_display_image">displayImage</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="empty_view_message">You do not have any favorite images yet!</string>
+    <string name="empty_view_message">No favorite images yet!</string>
     <string name="no_internet_message">Please connect to internet and try again!</string>
     <string name="transition_name">shared_image</string>
+    <string name="image_content_desc">tapped an image</string>
+    <string name="latest">latest</string>
+    <string name="popular">popular</string>
+    <string name="close_button">close the image</string>
+    <string name="share_button">share the image</string>
+    <string name="download_button">download the image</string>
+    <string name="favorite_button">add to favorites</string>
+    <string name="wallpaper_button">set as wallpaper</string>
+    <string name="fab_description">tap to sort the images</string>
 </resources>

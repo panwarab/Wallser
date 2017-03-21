@@ -16,16 +16,18 @@
             android:id="@+id/latest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/latest"
             android:shadowColor="@color/colorAccent"
-            android:text="latest"
+            android:text="@string/latest"
             android:textColor="@color/colorPrimaryDark" />
 
         <RadioButton
             android:id="@+id/popular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/popular"
             android:shadowColor="@color/colorAccent"
-            android:text="popular"
+            android:text="@string/popular"
             android:textColor="@color/colorPrimaryDark" />
 
 

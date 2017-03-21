@@ -73,16 +73,19 @@ public class ImageFragment extends Fragment {
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.fragment_image);
         final FloatingActionButton downloadb = (FloatingActionButton) rootView.findViewById(R.id.download_button);
         downloadb.setImageResource(ic_file_download);
+        downloadb.setVisibility(View.INVISIBLE);
         final FloatingActionButton favoriteb = (FloatingActionButton) rootView.findViewById(R.id.favorite_button);
         favoriteb.setImageResource(ic_favorite);
+        favoriteb.setVisibility(View.INVISIBLE);
         final FloatingActionButton wallpaperb = (FloatingActionButton) rootView.findViewById(R.id.wallpaper_button);
         wallpaperb.setImageResource(ic_wallpaper);
+        wallpaperb.setVisibility(View.INVISIBLE);
         ImageView close_button = (ImageView) rootView.findViewById(R.id.cross_button);
         close_button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getActivity().finish();
+                        getActivity().supportFinishAfterTransition();
                     }
                 }
         );
@@ -116,6 +119,9 @@ public class ImageFragment extends Fragment {
                         wallpaperb.setBackgroundTintList(ColorStateList.valueOf(color));
                     }
                 });
+                downloadb.setVisibility(View.VISIBLE);
+                favoriteb.setVisibility(View.VISIBLE);
+                wallpaperb.setVisibility(View.VISIBLE);
                 imageView.setImageBitmap(bitmap);
                 favoriteb.setOnClickListener(new View.OnClickListener() {
                     @Override
