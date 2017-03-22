@@ -45,33 +45,30 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="?android:attr/actionBarSize"
         android:weightSum="3">
-
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.75" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/favorite_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/favorite_button"
             app:fabSize="auto" />
-
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="0.75" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/download_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/download_button"
             app:fabSize="auto" />
-
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="0.75" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/wallpaper_button"
             android:layout_width="wrap_content"

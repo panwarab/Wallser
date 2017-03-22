@@ -202,7 +202,7 @@ public class ImageFragment extends Fragment {
                 imageView.setImageDrawable(placeHolderDrawable);
             }
         };
-        Picasso.with(rootView.getContext()).load(object.imageURL.trim()).error(R.drawable.sample).placeholder(R.drawable.sample).into(target);
+        Picasso.with(rootView.getContext()).load(object.imageURL.trim()).error(R.drawable.placeholder1).placeholder(R.drawable.placeholder1).into(target);
     }
 
 

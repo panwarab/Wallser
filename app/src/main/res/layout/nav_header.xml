@@ -17,10 +17,18 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/location_textview"
+            android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:layout_gravity="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nav_message"
+            android:textSize="10sp" />
+
 
     </LinearLayout>
 

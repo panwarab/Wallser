@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.R;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpNavigationView() {
         View view = navigationView.inflateHeaderView(R.layout.nav_header);
-        TextView header = (TextView) view.findViewById(R.id.location_textview);
+        TextView header = (TextView) view.findViewById(R.id.app_name);
         header.setText(R.string.app_name);
         header.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Medium.ttf"));
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -61,11 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     void selectedDrawerItem(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.favorites:
-                Toast.makeText(this, "Favorites activity code here", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.downloads:
-                Toast.makeText(this, "Download activity code here", Toast.LENGTH_SHORT).show();
+            case R.id.search:
+                
                 break;
         }
     }

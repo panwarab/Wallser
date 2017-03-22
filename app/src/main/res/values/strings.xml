@@ -16,4 +16,11 @@
     <string name="favorite_button">add to favorites</string>
     <string name="wallpaper_button">set as wallpaper</string>
     <string name="fab_description">tap to sort the images</string>
+    <string name="favorites">Favorites</string>
+    <string name="downloads">Downloads</string>
+    <string name="automate">Automate Favorites</string>
+    <string name="categories">Categories</string>
+    <string name="nav_message">Powered by Unsplash.com</string>
+    <string name="search">Search</string>
+    <string name="title_activity_search">SearchActivity</string>
 </resources>

@@ -3,12 +3,8 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/favorites"
-            android:icon="@drawable/ic_favorite"
-            android:title="Favorites" />
-        <item
-            android:id="@+id/downloads"
-            android:icon="@drawable/ic_file_download"
-            android:title="Downloads" />
+            android:id="@+id/search"
+            android:icon="@drawable/ic_youtube_searched_for"
+            android:title="@string/search" />
     </group>
 </menu>
