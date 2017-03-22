@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
+import android.util.Log;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.adapter.ImageAdapter;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 import static thenextvoyager.wallser.Data.Constants.SEARCH;
@@ -32,22 +34,25 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        wallpaperTask.execute();
+        wallpaperTask.execute(1);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        String search_query = getIntent().getExtras().getString(SEARCH);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(search_query);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String search_query = getIntent().getExtras().getString(SEARCH);
-        toolbar.setTitle(search_query);
-        wallpaperTask = new LoadWallpaperTask(search_query, SearchActivity.this, new ArrayList<DataModel>());
+        models = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.search_grid);
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
+        ImageAdapter imageAdapter = new ImageAdapter(SearchActivity.this, models);
+        wallpaperTask = new LoadWallpaperTask(search_query, SearchActivity.this, models, imageAdapter);
+        recyclerView.setAdapter(imageAdapter);
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -65,28 +70,27 @@ public class SearchActivity extends AppCompatActivity {
         String query;
         Context context;
         ArrayList<DataModel> models;
+        ImageAdapter imageAdapter;
         ProgressDialog dialog;
 
-        public LoadWallpaperTask(String search_query, Context context, ArrayList<DataModel> models) {
+        public LoadWallpaperTask(String search_query, Context context, ArrayList<DataModel> models, ImageAdapter imageAdapter) {
             super();
             query = search_query;
             this.context = context;
             this.models = models;
+            this.imageAdapter = imageAdapter;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
+            Log.d(TAG, "Data set size now " + models.size());
+            imageAdapter.swapDataSet(models);
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(context);
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage("Fetching");
-            dialog.show();
         }
 
         @Override
@@ -98,6 +102,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Integer... integers) {
             String URL = "https://api.unsplash.com/search/photos?page=" + integers[0] + "&client_id=" + api_key + "&per_page=" + per_page + "&query=" + query;
+            Log.d(TAG, "Search URL = " + URL);
             try {
                 URL url = new URL(URL);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -106,11 +111,13 @@ public class SearchActivity extends AppCompatActivity {
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
                     if (isCancelled()) break;
-                    DataModel dataModel = new DataModel(null, null, null);
+                    String total = jsonReader.nextInt() + "";
+                    String total_pages = jsonReader.nextName();
                     String name = jsonReader.nextName();
                     if (name.equals("results")) {
                         jsonReader.beginArray();
                         while (jsonReader.hasNext()) {
+                            DataModel dataModel = new DataModel(null, null, null);
                             jsonReader.beginObject();
                             while (jsonReader.hasNext()) {
                                 String token = jsonReader.nextName();
@@ -143,10 +150,11 @@ public class SearchActivity extends AppCompatActivity {
 
                             }
                             jsonReader.endObject();
+                            models.add(dataModel);
+
                         }
                         jsonReader.endArray();
                     }
-                    models.add(dataModel);
                 }
                 jsonReader.endObject();
             } catch (Exception e) {

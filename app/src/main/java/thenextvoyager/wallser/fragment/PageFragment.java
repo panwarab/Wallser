@@ -112,7 +112,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
 
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.w(TAG, "On load More Called with page number " + page);
-                loadDataUsingVolley(page, order_By);
+                loadDataUsingVolley(page, order_By, false);
             }
         };
 
@@ -150,10 +150,10 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             actionButton.setVisibility(View.VISIBLE);
             no_internet_container.setVisibility(View.INVISIBLE);
             if (savedInstanceState != null) {
-                loadDataUsingVolley(1, savedInstanceState.getString("ORDER_BY"));
+                loadDataUsingVolley(1, savedInstanceState.getString("ORDER_BY"), true);
             } else {
                 order_By = "latest";
-                loadDataUsingVolley(1, order_By);
+                loadDataUsingVolley(1, order_By, true);
             }
         }
     }
@@ -186,11 +186,14 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         return view;
     }
 
-    void loadDataUsingVolley(int page, String order_by) {
-        final ProgressDialog dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
+    void loadDataUsingVolley(int page, String order_by, boolean shouldShowProgressDialog) {
+        ProgressDialog dialog = null;
+        if (shouldShowProgressDialog)
+            dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
         Log.d(TAG, URL);
+        final ProgressDialog finalDialog = dialog;
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray array) {
@@ -212,8 +215,8 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                     }
                 }
 
-                if (dialog != null) {
-                    dialog.dismiss();
+                if (finalDialog != null) {
+                    finalDialog.dismiss();
                 }
                 Log.d(TAG, model.size() + "");
                 imageAdapter.swapDataSet(model);
@@ -223,7 +226,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                dialog.dismiss();
+                if (finalDialog != null) finalDialog.dismiss();
                 Toast.makeText(getContext(), "" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -242,6 +245,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         model = null;
         imageAdapter=null;
         order_By = order_by;
-        loadDataUsingVolley(1, order_By);
+        loadDataUsingVolley(1, order_By, false);
     }
 }
