@@ -185,6 +185,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     void setUpRecyclerView() {
         if (imageAdapter == null)
             imageAdapter = new ImageAdapter(getContext(), model);
+        imageAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(imageAdapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(scrollListener);
@@ -192,7 +193,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
 
     void loadDataUsingVolley(int page, String order_by) {
         final ProgressDialog dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
-        dialog.show();
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
         Log.d(TAG, URL);

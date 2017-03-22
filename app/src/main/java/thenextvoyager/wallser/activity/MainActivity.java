@@ -1,5 +1,6 @@
 package thenextvoyager.wallser.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,7 +62,11 @@ public class MainActivity extends AppCompatActivity {
     void selectedDrawerItem(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
-                
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(Constants.SEARCH, "space");
+                startActivity(intent);
+                break;
+            case R.id.automate:
                 break;
         }
     }
