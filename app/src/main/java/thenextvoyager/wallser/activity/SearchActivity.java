@@ -27,6 +27,13 @@ public class SearchActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<DataModel> models;
+    LoadWallpaperTask wallpaperTask;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        wallpaperTask.execute();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,7 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String search_query = getIntent().getExtras().getString(SEARCH);
         toolbar.setTitle(search_query);
-        final LoadWallpaperTask wallpaperTask = new LoadWallpaperTask(search_query, SearchActivity.this, new ArrayList<DataModel>());
-        wallpaperTask.execute();
+        wallpaperTask = new LoadWallpaperTask(search_query, SearchActivity.this, new ArrayList<DataModel>());
         recyclerView = (RecyclerView) findViewById(R.id.search_grid);
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setLayoutManager(layoutManager);

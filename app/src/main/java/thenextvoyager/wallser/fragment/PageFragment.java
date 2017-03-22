@@ -178,17 +178,12 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         no_internet_container = (FrameLayout) view.findViewById(R.id.no_internet_container);
-
-        return view;
-    }
-
-    void setUpRecyclerView() {
-        if (imageAdapter == null)
-            imageAdapter = new ImageAdapter(getContext(), model);
-        imageAdapter.notifyDataSetChanged();
+        imageAdapter = new ImageAdapter(getContext(), (model == null) ? new ArrayList<DataModel>() : model);
         recyclerView.setAdapter(imageAdapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(scrollListener);
+
+        return view;
     }
 
     void loadDataUsingVolley(int page, String order_by) {
@@ -221,8 +216,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                     dialog.dismiss();
                 }
                 Log.d(TAG, model.size() + "");
-                setUpRecyclerView();
-
+                imageAdapter.swapDataSet(model);
 
             }
         }, new Response.ErrorListener() {

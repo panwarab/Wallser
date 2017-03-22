@@ -37,6 +37,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.model = model;
     }
 
+    public void swapDataSet(ArrayList<DataModel> updatedData) {
+        model.clear();
+        model.addAll(updatedData);
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
