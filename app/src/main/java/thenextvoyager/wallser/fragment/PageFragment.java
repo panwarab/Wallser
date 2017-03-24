@@ -160,7 +160,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     }
 
     /**
-     * Call to this function attaches a new scroll listener to recycler view
+     * Call to this function attaches a new scroll listener
      */
     private void attachScrollListener() {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
@@ -252,15 +252,16 @@ public class PageFragment extends Fragment implements SortDialogCallback {
 
     /**
      * marks a new network call to Unsplash API
-     * Thus, set model array list to null, to start fresh.
+     * Thus, set model array list to 0, to start fresh.
      * @param order_by
      */
     @Override
     public void onDialogFinish(String order_by) {
-        model = null;
+        model.clear();
+        imageAdapter.swapDataSet(model);
+        scrollListener.resetState();
         requestQueue.cancelAll(order_By);
         order_By = order_by;
-        attachScrollListener();
         loadDataUsingVolley(1, order_By, true);
     }
 }

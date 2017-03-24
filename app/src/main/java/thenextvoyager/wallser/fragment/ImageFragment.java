@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,12 +134,15 @@ public class ImageFragment extends Fragment {
                     public void onClick(View view) {
 
                         if (!isImageInDatabase) {
+                            Log.d(TAG, "here here here");
                             AddDataTask addDataTask = new AddDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
                             addDataTask.execute(object);
                         } else {
+                            Log.d(TAG, "there there there");
                             DeleteDataTask dataTask = new DeleteDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
                             dataTask.execute(object);
                         }
+                        updateBooleanImageInDatabase();
                     }
                 });
                 wallpaperb.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +196,10 @@ public class ImageFragment extends Fragment {
             }
         };
         Picasso.with(rootView.getContext()).load(object.imageURL.trim()).error(R.drawable.placeholder1).placeholder(R.drawable.placeholder1).into(target);
+    }
+
+    private void updateBooleanImageInDatabase() {
+        isImageInDatabase = Utility.checkIfImageIsInDatabase(resolver, ImageContract.ImageEntry.COLUMN_NAME, object.name);
     }
 
 

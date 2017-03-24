@@ -39,6 +39,7 @@ public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
         if (aBoolean) {
             favoriteb.setImageResource(R.drawable.ic_favorite);
             fragment.getActivity().finish();
+            fragment.getActivity().overridePendingTransition(R.anim.left_in, R.anim.right_out);
         } else {
             Toast.makeText(context, "Couldn't delete from favorites", Toast.LENGTH_SHORT).show();
         }
