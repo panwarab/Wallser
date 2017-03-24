@@ -67,6 +67,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     Bundle savedInstanceState;
     // Attaching Handler to the main thread
     Handler handler = new Handler();
+    RequestQueue requestQueue;
     boolean shouldHandlerRunAgain = true;
     private ArrayList<DataModel> model;
     /**
@@ -99,14 +100,16 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onResume() {
         super.onResume();
-        if (handler != null)
-        handler.post(job);
+        if (handler != null) {
+            Log.d(TAG, "Starting Handler");
+            handler.post(job);
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "Starting Handler");
+        requestQueue = Volley.newRequestQueue(getContext());
         layoutManager = new GridLayoutManager(getContext(), 2);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
@@ -135,6 +138,12 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         inflater.inflate(R.menu.menu_page_fragment, menu);
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "Fragment onPause");
+    }
 
     private void swapViews() {
         if (detectConnection(getContext()) == false) {
@@ -190,7 +199,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         ProgressDialog dialog = null;
         if (shouldShowProgressDialog)
             dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
         Log.d(TAG, URL);
         final ProgressDialog finalDialog = dialog;
@@ -219,6 +227,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                     finalDialog.dismiss();
                 }
                 Log.d(TAG, model.size() + "");
+                if (model != null)
                 imageAdapter.swapDataSet(model);
 
             }
@@ -230,21 +239,21 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 Toast.makeText(getContext(), "" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+        objectRequest.setTag(order_By);
         requestQueue.add(objectRequest);
     }
 
     /**
      * marks a new network call to Unsplash API
      * Thus, set model array list to null, to start fresh.
-     * as model is reset, ImageAdapter also needs to start fresh.
-     *
      * @param order_by
      */
     @Override
     public void onDialogFinish(String order_by) {
         model = null;
-        imageAdapter=null;
+        requestQueue.cancelAll(order_By);
         order_By = order_by;
-        loadDataUsingVolley(1, order_By, false);
+        loadDataUsingVolley(1, order_By, true);
+        Log.d(TAG, scrollListener + "");
     }
 }

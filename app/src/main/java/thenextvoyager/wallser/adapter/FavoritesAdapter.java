@@ -69,7 +69,7 @@ public class FavoritesAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
                 view.getContext().startActivity(i, options.toBundle());
             }
         });
-        Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).placeholder(R.drawable.placeholder1).resize(100, 100).centerCrop().into(viewHolder.image);
+        Picasso.with(context).load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).placeholder(R.drawable.placeholder1).resize(200, 200).centerCrop().into(viewHolder.image);
     }
 
 

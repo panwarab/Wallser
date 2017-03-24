@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public void swapDataSet(ArrayList<DataModel> updatedData) {
-        Log.d(TAG, "Swapping Data Set");
         model.clear();
         model.addAll(updatedData);
         notifyDataSetChanged();
