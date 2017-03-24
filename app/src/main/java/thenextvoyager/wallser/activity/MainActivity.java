@@ -14,11 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.SimpleFragmentPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    AdView adView;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -39,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);

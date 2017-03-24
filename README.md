@@ -23,7 +23,7 @@ A wallpaper browsing and downloading app
     
 - [x] If Analytics is used, the app creates only one analytics instance. If Analytics was not used, meets specifications.
 
-- [ ] If Admob is used, the app displays test ads. If Admob was not used,meets specifications.
+- [x] If Admob is used, the app displays test ads. If Admob was not used,meets specifications.
 
 - [x] App theme extends AppCompat.
 
