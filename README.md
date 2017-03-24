@@ -33,6 +33,8 @@ A wallpaper browsing and downloading app
 
     > App uses shared element transition
 
+    > App uses a left_in and right_out transition once user marks an image as unfavorite.
+
 - [ ] App builds from a clean repository checkout with no additional configuration.
 
 - [ ] App builds and deploys using the installRelease Gradle task.
