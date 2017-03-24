@@ -23,4 +23,9 @@
     <string name="nav_message">Powered by Unsplash.com</string>
     <string name="search">Search</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="wallpaper_set">Wall set!</string>
+    <string name="image_present">Image exists!</string>
+    <string name="download_success">Image saved!</string>
+    <string name="download_failed">Please try again!</string>
+
 </resources>

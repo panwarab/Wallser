@@ -66,7 +66,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     FrameLayout no_internet_container;
     Bundle savedInstanceState;
     // Attaching Handler to the main thread
-    Handler handler = new Handler();
+    Handler handler = makeHandler();
     RequestQueue requestQueue;
     boolean shouldHandlerRunAgain = true;
     private ArrayList<DataModel> model;
@@ -90,6 +90,10 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 handler.postDelayed(job, HANDLER_DELAY_TIME);
         }
     };
+
+    private Handler makeHandler() {
+        return new Handler();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -135,6 +139,8 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "Fragment onPause");
+        if (handler == null && !detectConnection(getContext()))
+            handler = makeHandler();
     }
 
     private void swapViews() {

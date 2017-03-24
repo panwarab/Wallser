@@ -155,7 +155,7 @@ public class ImageFragment extends Fragment {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getContext(), "Wallpapaer Set!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
                     }
                 });
                 downloadb.setOnClickListener(new View.OnClickListener() {
@@ -163,11 +163,11 @@ public class ImageFragment extends Fragment {
                     public void onClick(View view) {
                         try {
                             if (Utility.saveImage(bitmap, getContext(), object.name, false))
-                                Toast.makeText(getContext(), "Image Present!!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.image_present, Toast.LENGTH_SHORT).show();
                             else
-                                Toast.makeText(getContext(), "Download done!!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.download_success, Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                            Toast.makeText(getContext(), "Could not download!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.download_failed, Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }

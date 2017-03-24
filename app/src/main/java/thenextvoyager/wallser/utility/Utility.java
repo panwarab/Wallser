@@ -142,10 +142,6 @@ public class Utility {
         return false;
     }
 
-    /**
-     * Created by Abhiroj on 3/8/2017.
-     */
-
     public static class AsyncImageDownloader extends AsyncTask<Object, Object, Void> {
 
 

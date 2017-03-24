@@ -15,7 +15,7 @@ A wallpaper browsing and downloading app
 
 - [x] App includes support for accessibility. That includes content descriptions, navigation using a D-pad, and, if applicable, non-audio versions of audio cues.
 
-- [ ] App keeps all strings in a strings.xml file and enables RTL layout switching on all layouts.
+- [x] App keeps all strings in a strings.xml file and enables RTL layout switching on all layouts.
 
 - [x] App provides a widget to provide relevant information to the user on the home screen.
     
