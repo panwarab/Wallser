@@ -105,6 +105,14 @@ public class Utility {
     }
 
 
+    /**
+     * returns true if image with given id as param1 exists in Database.
+     *
+     * @param resolver
+     * @param COLUMN_NAME
+     * @param param1
+     * @return
+     */
     public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String COLUMN_NAME, String param1) {
         Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, new String[]{COLUMN_NAME}, COLUMN_NAME + " = ?", new String[]{param1}, null);
         return cursor.getCount() > 0;

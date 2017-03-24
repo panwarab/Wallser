@@ -3,18 +3,14 @@ package thenextvoyager.wallser.fragment;
 
 import android.app.WallpaperManager;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.res.ColorStateList;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +26,11 @@ import java.io.IOException;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.asynctasks.AddDataTask;
+import thenextvoyager.wallser.asynctasks.DeleteDataTask;
 import thenextvoyager.wallser.utility.Utility;
 
+import static thenextvoyager.wallser.Data.Constants.IMAGE_FRAGMENT_TAG;
 import static thenextvoyager.wallser.R.drawable.ic_favorite;
 import static thenextvoyager.wallser.R.drawable.ic_file_download;
 import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
@@ -47,6 +46,8 @@ public class ImageFragment extends Fragment {
     private static final String ARG_PARAM = "param2";
     private static final String TAG = ImageFragment.class.getSimpleName();
     DataModel object;
+    private boolean isImageInDatabase = false;
+    private ContentResolver resolver;
     private FirebaseAnalytics analytics;
 
     public static ImageFragment newInstance(DataModel object) {
@@ -63,6 +64,8 @@ public class ImageFragment extends Fragment {
         if (getArguments() != null) {
             object = (DataModel) getArguments().getSerializable(ARG_PARAM);
         }
+        resolver = getContext().getContentResolver();
+        isImageInDatabase = Utility.checkIfImageIsInDatabase(resolver, ImageContract.ImageEntry.COLUMN_NAME, object.name);
     }
 
     @Override
@@ -75,6 +78,8 @@ public class ImageFragment extends Fragment {
         downloadb.setImageResource(ic_file_download);
         downloadb.setVisibility(View.INVISIBLE);
         final FloatingActionButton favoriteb = (FloatingActionButton) rootView.findViewById(R.id.favorite_button);
+        if (isImageInDatabase) favoriteb.setImageResource(R.drawable.ic_favorite_filled);
+        else
         favoriteb.setImageResource(ic_favorite);
         favoriteb.setVisibility(View.INVISIBLE);
         final FloatingActionButton wallpaperb = (FloatingActionButton) rootView.findViewById(R.id.wallpaper_button);
@@ -126,29 +131,13 @@ public class ImageFragment extends Fragment {
                 favoriteb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Uri uri = ImageContract.ImageEntry.CONTENT_URI;
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(ImageContract.ImageEntry.COLUMN_NAME, object.name);
-                        contentValues.put(ImageContract.ImageEntry.COLUMN_REGURL, object.imageURL);
-                        contentValues.put(ImageContract.ImageEntry.COLUMN_DLDURL, object.downloadURL);
-                        try {
-                            ContentResolver resolver = getContext().getContentResolver();
-                            if (!(Utility.checkIfImageIsInDatabase(resolver, ImageContract.ImageEntry.COLUMN_NAME, object.name))) {
-                                resolver.insert(uri, contentValues);
-                                Cursor cursor = resolver.query(uri, new String[]{ImageContract.ImageEntry.COLUMN_NAME, ImageContract.ImageEntry.COLUMN_DLDURL, ImageContract.ImageEntry.COLUMN_REGURL}, null, null, null);
-                                if (cursor != null) {
-                                    cursor.moveToFirst();
-                                    do {
-                                        Log.d(TAG, "Cursor data : Name " + cursor.getString(0) + "\n");
-                                        if (cursor.isAfterLast()) break;
-                                    } while ((cursor.moveToNext()));
-                                }
-                                cursor.close();
-                            } else {
-                                Toast.makeText(getContext(), "Image present", Toast.LENGTH_LONG).show();
-                            }
-                        } catch (Error error) {
-                            Log.e(TAG, "Insert failed due to " + error.getCause());
+
+                        if (!isImageInDatabase) {
+                            AddDataTask addDataTask = new AddDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
+                            addDataTask.execute(object);
+                        } else {
+                            DeleteDataTask dataTask = new DeleteDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
+                            dataTask.execute(object);
                         }
                     }
                 });

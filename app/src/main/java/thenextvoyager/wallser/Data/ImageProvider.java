@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Abhiroj on 3/9/2017.
  */
@@ -111,7 +113,13 @@ public class ImageProvider extends ContentProvider {
             case IMAGE:
                 database.execSQL("DROP TABLE " + ImageContract.ImageEntry.TABLE_NAME + ";");
                 Log.d(ImageDBHelper.class.getSimpleName(), "Table deleted");
+                break;
+            case IMAGE_ID:
+                Log.d(TAG, "Deleting from " + uri);
+                long id = (int) ContentUris.parseId(uri);
+                database.execSQL("DELETE FROM " + ImageContract.ImageEntry.TABLE_NAME + " WHERE " + ImageContract.ImageEntry._ID + "=" + id);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return 0;
     }
 

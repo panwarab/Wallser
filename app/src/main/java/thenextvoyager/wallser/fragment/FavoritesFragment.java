@@ -45,6 +45,9 @@ public class FavoritesFragment extends Fragment {
                 view1.setVisibility(View.VISIBLE);
                 empty_view_cont.setVisibility(View.INVISIBLE);
                 favoritesAdapter.swapCursor(data);
+            } else if (data.getCount() == 0) {
+                empty_view_cont.setVisibility(View.VISIBLE);
+                view1.setVisibility(View.INVISIBLE);
             }
         }
 
