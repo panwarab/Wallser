@@ -111,14 +111,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         super.onCreate(savedInstanceState);
         requestQueue = Volley.newRequestQueue(getContext());
         layoutManager = new GridLayoutManager(getContext(), 2);
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.w(TAG, "On load More Called with page number " + page);
-                loadDataUsingVolley(page, order_By, false);
-            }
-        };
-
     }
 
     @Override
@@ -167,6 +159,20 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         }
     }
 
+    /**
+     * Call to this function attaches a new scroll listener to recycler view
+     */
+    private void attachScrollListener() {
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.w(TAG, "On load More Called with page number " + page);
+                loadDataUsingVolley(page, order_By, false);
+            }
+        };
+        recyclerView.addOnScrollListener(scrollListener);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, final Bundle savedInstanceState) {
@@ -190,7 +196,8 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         imageAdapter = new ImageAdapter(getContext(), (model == null) ? new ArrayList<DataModel>() : model);
         recyclerView.setAdapter(imageAdapter);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(scrollListener);
+        attachScrollListener();
+
 
         return view;
     }
@@ -253,7 +260,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         model = null;
         requestQueue.cancelAll(order_By);
         order_By = order_by;
+        attachScrollListener();
         loadDataUsingVolley(1, order_By, true);
-        Log.d(TAG, scrollListener + "");
     }
 }
