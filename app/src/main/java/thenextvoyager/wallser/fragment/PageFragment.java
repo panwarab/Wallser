@@ -1,6 +1,7 @@
 package thenextvoyager.wallser.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -54,6 +55,8 @@ public class PageFragment extends Fragment implements SortDialogCallback {
      */
     private static final String per_page = "10";
     public static String order_By;
+    ProgressDialog dialog = null;
+    Context context;
     /**
      * Unsplash API call parameter, By Default=latest
      * Change it in Pager Fragment, based on Tab tapped
@@ -98,6 +101,9 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (dialog != null) {
+            dialog.cancel();
+        }
         outState.putString("ORDER_BY", order_By);
     }
 
@@ -113,6 +119,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getContext();
         requestQueue = Volley.newRequestQueue(getContext());
         layoutManager = new GridLayoutManager(getContext(), 2);
     }
@@ -209,9 +216,9 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     }
 
     void loadDataUsingVolley(int page, String order_by, boolean shouldShowProgressDialog) {
-        ProgressDialog dialog = null;
-        if (shouldShowProgressDialog)
+        if (shouldShowProgressDialog) {
             dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
+        }
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
         Log.d(TAG, URL);
         final ProgressDialog finalDialog = dialog;
@@ -249,7 +256,8 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (finalDialog != null) finalDialog.dismiss();
-                Toast.makeText(getContext(), "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                if (context != null)
+                    Toast.makeText(context, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         objectRequest.setTag(order_By);
