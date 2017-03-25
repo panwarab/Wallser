@@ -77,6 +77,8 @@ A wallpaper browsing and downloading app
 
 > Contributions are always welcome!
 
+> Fork it, Clone it or Download it! 
+
 ## Feature Suggestion
 
 > Please raise an issue for that. That will be good. :)
