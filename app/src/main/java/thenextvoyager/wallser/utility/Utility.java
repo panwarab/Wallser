@@ -120,14 +120,16 @@ public class Utility {
     public static boolean detectConnection(Context context) {
         if (context == null) return false;
         ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
-                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+        NetworkInfo mobile_info = conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo wifi_info = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (mobile_info == null || wifi_info == null) return false;
+        if (mobile_info.getState() == NetworkInfo.State.CONNECTED
+                || wifi_info.getState() == NetworkInfo.State.CONNECTED) {
 
             return true;
 
-        } else if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED
-                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
+        } else if (mobile_info.getState() == NetworkInfo.State.DISCONNECTED
+                || wifi_info.getState() == NetworkInfo.State.DISCONNECTED) {
 
             return false;
         }
