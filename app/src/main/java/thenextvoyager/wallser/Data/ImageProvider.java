@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Abhiroj on 3/9/2017.
@@ -56,8 +53,6 @@ public class ImageProvider extends ContentProvider {
                 long _id = ContentUris.parseId(uri);
                 retCursor = database.query(ImageContract.ImageEntry.TABLE_NAME, projection, ImageContract.ImageEntry._ID + "= ?", new String[]{String.valueOf(_id)}, null, null, sortorder);
                 break;
-            default:
-                Log.d(ImageProvider.class.getSimpleName(), "query Failure");
         }
 
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -73,8 +68,6 @@ public class ImageProvider extends ContentProvider {
                 return ImageContract.ImageEntry.CONTENT_TYPE;
             case IMAGE_ID:
                 return ImageContract.ImageEntry.CONTENT_ITEM_TYPE;
-            default:
-                Log.d(ImageProvider.class.getSimpleName(), "Unknown Uri = " + uri);
         }
         return null;
     }
@@ -112,10 +105,8 @@ public class ImageProvider extends ContentProvider {
         switch (MATCHER.match(uri)) {
             case IMAGE:
                 database.execSQL("DROP TABLE " + ImageContract.ImageEntry.TABLE_NAME + ";");
-                Log.d(ImageDBHelper.class.getSimpleName(), "Table deleted");
                 break;
             case IMAGE_ID:
-                Log.d(TAG, "Deleting from " + uri);
                 long id = (int) ContentUris.parseId(uri);
                 database.execSQL("DELETE FROM " + ImageContract.ImageEntry.TABLE_NAME + " WHERE " + ImageContract.ImageEntry._ID + "=" + id);
         }

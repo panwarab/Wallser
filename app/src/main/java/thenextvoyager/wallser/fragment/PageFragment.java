@@ -37,6 +37,7 @@ import thenextvoyager.wallser.callback.SortDialogCallback;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 import static thenextvoyager.wallser.Data.Constants.CHOICE_TAG;
+import static thenextvoyager.wallser.Data.Constants.DATA_TAG;
 import static thenextvoyager.wallser.Data.Constants.HANDLER_DELAY_TIME;
 import static thenextvoyager.wallser.Data.Constants.api_key;
 import static thenextvoyager.wallser.utility.Utility.detectConnection;
@@ -101,6 +102,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             dialog.cancel();
         }
         outState.putString(CHOICE_TAG, order_By);
+        outState.putSerializable(DATA_TAG, model);
     }
 
     @Override
@@ -140,7 +142,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onPause() {
         super.onPause();
-        if (handler == null && !detectConnection(getContext()))
+        if (handler == null && !detectConnection(getContext()) && (model == null || model.size() == 0))
             handler = makeHandler();
     }
 
@@ -237,7 +239,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             public void onErrorResponse(VolleyError error) {
                 if (finalDialog != null) finalDialog.dismiss();
                 if (context != null)
-                    Toast.makeText(context, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Connectivity Problem!", Toast.LENGTH_SHORT).show();
             }
         });
         objectRequest.setTag(order_By);

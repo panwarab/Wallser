@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -48,7 +47,6 @@ public class Utility {
      */
     public static boolean saveImage(Bitmap bitmap, Context context, String name, boolean share) throws Exception {
         if (bitmap != null) {
-            Log.d(context.getPackageName(), "Storing bitmap");
             String fname = name + ".jpeg";
             File root = Environment.getExternalStorageDirectory();
             walserDirectory = new File(root, "Wallser");
@@ -64,7 +62,6 @@ public class Utility {
             }
             else {
                 File imageFile = new File(walserDirectory, fname);
-                Log.d(context.getPackageName(), "Image Path = " + imageFile.getPath());
 
                 FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
@@ -79,9 +76,6 @@ public class Utility {
                 }
                 return false;
             }
-        } else {
-            Log.d(context.getPackageName(), "Null bitmap");
-
         }
         return false;
     }
@@ -124,6 +118,7 @@ public class Utility {
     }
 
     public static boolean detectConnection(Context context) {
+        if (context == null) return false;
         ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
@@ -157,7 +152,6 @@ public class Utility {
         @Override
         protected Void doInBackground(Object... voids) {
             try {
-                Log.d(TAG, "URL received : --- >" + downloadURL);
                 URL url = new URL("https://unsplash.com/photos/65sru5g6xHk/download");
                 HttpURLConnection connection = getFinalURL(url);
                 connection.setDoInput(true);
@@ -179,7 +173,6 @@ public class Utility {
             httpURLConnection.connect();
             if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP || httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
                 URL redirectUrl = new URL(httpURLConnection.getHeaderField("Location"));
-                Log.d(TAG, "Redirected URL --->" + redirectUrl);
                 finalUrl = redirectUrl;
             }
             return (HttpURLConnection) finalUrl.openConnection();

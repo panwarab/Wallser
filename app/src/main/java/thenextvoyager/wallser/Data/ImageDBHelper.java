@@ -3,7 +3,6 @@ package thenextvoyager.wallser.Data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Created by Abhiroj on 3/9/2017.
@@ -16,13 +15,11 @@ public class ImageDBHelper extends SQLiteOpenHelper {
 
     public ImageDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Log.d("DB Helper", "Constructor Called");
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         addImage(sqLiteDatabase);
-        Log.d(ImageDBHelper.class.getSimpleName(), "New Table created");
 
     }
 
@@ -35,6 +32,5 @@ public class ImageDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        Log.i(ImageDBHelper.class.getSimpleName(), "Old version = " + i + " New version = " + i1);
     }
 }
