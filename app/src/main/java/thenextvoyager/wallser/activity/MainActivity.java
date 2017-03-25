@@ -93,6 +93,7 @@
                     startActivity(Intent.createChooser(emailIntent, "Send mail..."));
                     break;
             }
+            drawerLayout.closeDrawers();
 
         }
     }
