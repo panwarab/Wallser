@@ -3,9 +3,9 @@ A wallpaper browsing and downloading app
 
 ## API Key Set-up
 
-1. Register on unsplash.com
+1. Register on <a href="https://unsplash.com/">unsplash.com</a>
 
-2. Get your new api key
+2. Get your new api key by selecting your <a href="https://unsplash.com/oauth/applications">applications</a>
 
 3. Make a constants.xml file in res\values directory
 
@@ -72,7 +72,14 @@ A wallpaper browsing and downloading app
  - [x] Implement sharing functionality in your app, making use of intent extras to share rich content (i.e. a paragraph of content-specific text, a link and description, an image, etc).
  
  - [x] material design patterns such as shared element transitions across activities
-    
+ 
+ ## Contributions
+
+> Contributions are always welcome!
+
+## Feature Suggestion
+
+> Please raise an issue for that. That will be good. :)
 
 
 
