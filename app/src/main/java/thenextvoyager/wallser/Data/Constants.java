@@ -17,6 +17,7 @@ public class Constants {
     public static final long HANDLER_DELAY_TIME = 1000;
     public static final String IMAGE_TAG = "IMAGE_PASS";
     public static final String SEARCH = "search";
+    public static final String CHOICE_TAG="ORDER_BY";
     public static String api_key;
     Context context;
 

@@ -53,7 +53,7 @@ public class AddDataTask extends AsyncTask<DataModel, Void, Boolean> {
         if (aBoolean) {
             favorite.setImageResource(R.drawable.ic_favorite_filled);
         } else {
-            Toast.makeText(context, "Couldn't add to favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Image present!", Toast.LENGTH_SHORT).show();
         }
 
 

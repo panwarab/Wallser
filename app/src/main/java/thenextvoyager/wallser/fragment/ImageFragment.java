@@ -45,7 +45,6 @@ import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
 public class ImageFragment extends Fragment {
 
     private static final String ARG_PARAM = "param2";
-    private static final String TAG = ImageFragment.class.getSimpleName();
     DataModel object;
     private boolean isImageInDatabase = false;
     private ContentResolver resolver;
@@ -134,12 +133,10 @@ public class ImageFragment extends Fragment {
                     public void onClick(View view) {
 
                         if (!isImageInDatabase) {
-                            Log.d(TAG, "here here here");
                             AddDataTask addDataTask = new AddDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
                             addDataTask.execute(object);
                         } else {
-                            Log.d(TAG, "there there there");
-                            DeleteDataTask dataTask = new DeleteDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
+                             DeleteDataTask dataTask = new DeleteDataTask(getFragmentManager().findFragmentByTag(IMAGE_FRAGMENT_TAG), favoriteb);
                             dataTask.execute(object);
                         }
                         updateBooleanImageInDatabase();

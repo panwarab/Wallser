@@ -5,23 +5,9 @@
         android:id="@+id/group1"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/search"
-            android:icon="@drawable/ic_youtube_searched_for"
-            android:title="@string/search" />
-        <item
-            android:id="@+id/automate"
-            android:icon="@drawable/ic_youtube_searched_for"
-            android:title="@string/automate" />
+            android:id="@+id/feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/share" />
     </group>
 
-    <group
-        android:id="@+id/group2"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/rate_app"
-            android:title="Rate Us" />
-        <item
-            android:id="@+id/About_Dev"
-            android:title="About us" />
-    </group>
 </menu>

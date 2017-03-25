@@ -63,15 +63,6 @@
             android:exported="true"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity
-            android:name=".activity.SearchActivity"
-            android:label="@string/title_activity_search"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="thenextvoyager.wallser.activity.MainActivity" />
-        </activity>
     </application>
 
 </manifest>

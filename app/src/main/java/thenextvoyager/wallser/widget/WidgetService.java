@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -27,8 +26,6 @@ public class WidgetService extends RemoteViewsService {
 
 
     public static class RemoteAdapter implements RemoteViewsFactory {
-
-        private static final String TAG = RemoteAdapter.class.getSimpleName();
         Cursor cursor;
         Context context;
         int appWidgetId;
@@ -61,11 +58,9 @@ public class WidgetService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int i) {
             cursor.moveToPosition(i);
-            Log.d(TAG, "Cursor is at " + cursor.getPosition());
             final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_item);
             try {
                 Picasso picasso = Picasso.with(context);
-                picasso.setLoggingEnabled(true);
                 Bitmap bitmap = picasso.load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).error(R.drawable.sample).get();
                 remoteViews.setImageViewBitmap(R.id.wid_image, bitmap);
             } catch (IOException e) {

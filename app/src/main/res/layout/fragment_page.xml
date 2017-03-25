@@ -12,15 +12,6 @@
 
     <include layout="@layout/no_internet_layout" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/sort_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end|right"
-        android:layout_margin="15dp"
-        android:contentDescription="@string/fab_description"
-        android:src="@drawable/ic_sort"
-        app:backgroundTint="@color/colorPrimary" />
 </android.support.design.widget.CoordinatorLayout>
 
 

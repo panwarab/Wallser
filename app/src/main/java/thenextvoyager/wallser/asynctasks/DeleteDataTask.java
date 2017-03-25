@@ -20,7 +20,6 @@ import thenextvoyager.wallser.R;
 
 public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
 
-    public static final String TAG = DeleteDataTask.class.getSimpleName();
     Fragment fragment;
     Context context;
     ContentResolver resolver;
@@ -50,12 +49,8 @@ public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
         try {
             DataModel object = dataModels[0];
             Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, null, ImageContract.ImageEntry.COLUMN_NAME + "=?", new String[]{object.name}, null);
-            Log.d(TAG, "Cursor Count is " + cursor.getCount());
-            for (int i = 0; i < cursor.getColumnCount(); i++)
-                Log.d(TAG, "Cursor Column " + cursor.getColumnName(i));
             cursor.moveToFirst();
             long id = cursor.getLong(cursor.getColumnIndex(ImageContract.ImageEntry._ID));
-            Log.d(TAG, "ID fetched is " + id);
             Uri image_uri = ImageContract.ImageEntry.buildImageuri(id);
             resolver.delete(image_uri, null, null);
             return true;

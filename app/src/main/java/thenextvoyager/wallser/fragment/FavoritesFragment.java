@@ -9,7 +9,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import thenextvoyager.wallser.adapter.FavoritesAdapter;
  */
 public class FavoritesFragment extends Fragment {
 
-    private static final String TAG = FavoritesFragment.class.getSimpleName();
+
 
     FavoritesAdapter favoritesAdapter;
     FrameLayout empty_view_cont;
@@ -34,13 +33,11 @@ public class FavoritesFragment extends Fragment {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             CursorLoader cursorLoader = new CursorLoader(getContext(), ImageContract.ImageEntry.CONTENT_URI, null, null, null, null);
-            Log.d(TAG, "cursor loader working on ------> " + cursorLoader.getUri());
             return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            Log.d(TAG, "Load Finished , Cursor count -->" + data.getCount());
             if (data.getCount() != 0) {
                 view1.setVisibility(View.VISIBLE);
                 empty_view_cont.setVisibility(View.INVISIBLE);
@@ -53,7 +50,6 @@ public class FavoritesFragment extends Fragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            Log.d(TAG, "Loader Reset");
             favoritesAdapter.swapCursor(null);
         }
     };
@@ -71,8 +67,6 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Log.d(TAG, "View Created");
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         empty_view_cont = (FrameLayout) view.findViewById(R.id.empty_view_container);
         empty_view_cont.setVisibility(View.VISIBLE);

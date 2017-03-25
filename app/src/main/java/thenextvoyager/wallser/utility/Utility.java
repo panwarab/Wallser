@@ -27,6 +27,8 @@ import java.net.URL;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.Data.ImageContract;
 
+import static thenextvoyager.wallser.utility.Utility.AsyncImageDownloader.TAG;
+
 
 /**
  * Created by Abhiroj on 3/6/2017.
@@ -34,7 +36,6 @@ import thenextvoyager.wallser.Data.ImageContract;
 
 public class Utility {
 
-    private static final String TAG = Utility.class.getSimpleName();
     private static File walserDirectory;
 
     /**
@@ -92,10 +93,8 @@ public class Utility {
             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
             String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1);
             String type = mimeTypeMap.getMimeTypeFromExtension(ext);
-            Log.d(TAG, "Type  of data to share is " + type);
             Intent shareintent = new Intent(Intent.ACTION_SEND);
             shareintent.setType("*/*");
-            Log.d(TAG, "File URI " + Uri.fromFile(file));
             shareintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             shareintent.putExtra(Intent.EXTRA_TEXT, "Hey! improve your phone wall with wallser!");
             context.startActivity(Intent.createChooser(shareintent, "Share Using"));

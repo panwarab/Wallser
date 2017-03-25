@@ -29,7 +29,6 @@ import static thenextvoyager.wallser.Data.Constants.MODEL_TAG;
 public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 
-    private static final String TAG = ImageAdapter.class.getSimpleName();
     Context context;
     ArrayList<DataModel> model;
 

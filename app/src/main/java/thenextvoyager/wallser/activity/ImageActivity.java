@@ -3,7 +3,6 @@ package thenextvoyager.wallser.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
@@ -15,7 +14,6 @@ import static thenextvoyager.wallser.Data.Constants.MODEL_TAG;
 
 public class ImageActivity extends AppCompatActivity {
 
-    private static final String TAG = ImageActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +22,6 @@ public class ImageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         DataModel object = (DataModel) bundle.getSerializable(MODEL_TAG);
-        Log.d(TAG, object.toString());
 
         ImageFragment fragment = ImageFragment.newInstance(object);
         getSupportFragmentManager().beginTransaction().add(R.id.image_frag_container, fragment, IMAGE_FRAGMENT_TAG).commitAllowingStateLoss();

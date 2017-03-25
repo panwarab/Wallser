@@ -5,11 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +36,7 @@ import thenextvoyager.wallser.adapter.ImageAdapter;
 import thenextvoyager.wallser.callback.SortDialogCallback;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
+import static thenextvoyager.wallser.Data.Constants.CHOICE_TAG;
 import static thenextvoyager.wallser.Data.Constants.HANDLER_DELAY_TIME;
 import static thenextvoyager.wallser.Data.Constants.api_key;
 import static thenextvoyager.wallser.utility.Utility.detectConnection;
@@ -49,7 +48,6 @@ import static thenextvoyager.wallser.utility.Utility.detectConnection;
 
 public class PageFragment extends Fragment implements SortDialogCallback {
 
-    private static final String TAG = PageFragment.class.getSimpleName();
     /**
      * Unsplash API, By Default=10
      */
@@ -65,7 +63,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     ImageAdapter imageAdapter;
     GridLayoutManager layoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
-    FloatingActionButton actionButton;
     FrameLayout no_internet_container;
     Bundle savedInstanceState;
     // Attaching Handler to the main thread
@@ -87,7 +84,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     Runnable job = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "Thread run " + job.hashCode());
             swapViews();
             if (shouldHandlerRunAgain)
                 handler.postDelayed(job, HANDLER_DELAY_TIME);
@@ -104,14 +100,13 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         if (dialog != null) {
             dialog.cancel();
         }
-        outState.putString("ORDER_BY", order_By);
+        outState.putString(CHOICE_TAG, order_By);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (handler != null) {
-            Log.d(TAG, "Starting Handler");
             handler.post(job);
         }
     }
@@ -127,11 +122,11 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search:
-                Toast.makeText(getContext(), "Async task", Toast.LENGTH_SHORT).show();
+            case R.id.sort:
+                SortDialog sortDialog = new SortDialog();
+                sortDialog.setTargetFragment(PageFragment.this, 911);
+                sortDialog.show(getChildFragmentManager(), "sortfragment");
                 break;
-            default:
-                Toast.makeText(getContext(), "Invalid Options", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -145,7 +140,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "Fragment onPause");
         if (handler == null && !detectConnection(getContext()))
             handler = makeHandler();
     }
@@ -153,18 +147,17 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     private void swapViews() {
         if (detectConnection(getContext()) == false) {
             recyclerView.setVisibility(View.INVISIBLE);
-            actionButton.setVisibility(View.INVISIBLE);
+            setHasOptionsMenu(false);
             no_internet_container.setVisibility(View.VISIBLE);
         } else {
-            Log.d(TAG, "Removing callbacks from handler and stopping it from posting");
             shouldHandlerRunAgain = false;
             handler.removeCallbacks(job, null);
             handler = null;
             recyclerView.setVisibility(View.VISIBLE);
-            actionButton.setVisibility(View.VISIBLE);
+            setHasOptionsMenu(true);
             no_internet_container.setVisibility(View.INVISIBLE);
             if (savedInstanceState != null) {
-                loadDataUsingVolley(1, savedInstanceState.getString("ORDER_BY"), true);
+                loadDataUsingVolley(1, savedInstanceState.getString(CHOICE_TAG), true);
             } else {
                 order_By = "latest";
                 loadDataUsingVolley(1, order_By, true);
@@ -179,12 +172,13 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.w(TAG, "On load More Called with page number " + page);
                 loadDataUsingVolley(page, order_By, false);
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
     }
+
+
 
     @Nullable
     @Override
@@ -192,17 +186,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
 
         this.savedInstanceState = savedInstanceState;
         View view = inflater.inflate(R.layout.fragment_page, container, false);
-
-        actionButton = (FloatingActionButton) view.findViewById(R.id.sort_button);
-        actionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SortDialog sortDialog = new SortDialog();
-                sortDialog.setTargetFragment(PageFragment.this, 911);
-                sortDialog.show(getChildFragmentManager(), "sortfragment");
-            }
-        });
-
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         no_internet_container = (FrameLayout) view.findViewById(R.id.no_internet_container);
@@ -220,7 +203,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
         }
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
-        Log.d(TAG, URL);
         final ProgressDialog finalDialog = dialog;
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
@@ -237,7 +219,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                         JSONObject object2 = object.getJSONObject("links");
                         String downloadURL = object2.getString("download");
                         model.add(new DataModel(imageURL, downloadURL, id));
-                        Log.d(TAG, downloadURL);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -246,7 +227,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 if (finalDialog != null) {
                     finalDialog.dismiss();
                 }
-                Log.d(TAG, model.size() + "");
                 if (model != null)
                 imageAdapter.swapDataSet(model);
 
@@ -271,6 +251,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
      */
     @Override
     public void onDialogFinish(String order_by) {
+        if(model!=null)
         model.clear();
         imageAdapter.swapDataSet(model);
         scrollListener.resetState();
