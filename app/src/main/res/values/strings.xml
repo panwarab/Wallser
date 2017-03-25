@@ -29,4 +29,7 @@
     <string name="download_failed">Please try again!</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="share">Share Feedback</string>
+    <string name="no_image_present">No Image Present!</string>
+    <string name="connissue">Connectivity Problem!</string>
+    <string name="loading_images">Loading...</string>
 </resources>

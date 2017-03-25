@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.widget.Toast;
 
 import thenextvoyager.wallser.Data.DataModel;
@@ -40,7 +39,7 @@ public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
             fragment.getActivity().finish();
             fragment.getActivity().overridePendingTransition(R.anim.left_in, R.anim.right_out);
         } else {
-            Toast.makeText(context, "Couldn't delete from favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.image_present, Toast.LENGTH_SHORT).show();
         }
     }
 

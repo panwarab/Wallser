@@ -239,7 +239,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             public void onErrorResponse(VolleyError error) {
                 if (finalDialog != null) finalDialog.dismiss();
                 if (context != null)
-                    Toast.makeText(context, "Connectivity Problem!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.connissue, Toast.LENGTH_SHORT).show();
             }
         });
         objectRequest.setTag(order_By);

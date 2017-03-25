@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.Data.ImageContract;
+import thenextvoyager.wallser.R;
 
 
 /**
@@ -83,7 +84,7 @@ public class Utility {
             shareintent.putExtra(Intent.EXTRA_TEXT, "Hey! check new walls at wallser!");
             context.startActivity(Intent.createChooser(shareintent, "Share Using"));
         } else {
-            Toast.makeText(context, "No image present!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.no_image_present, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -127,6 +128,6 @@ public class Utility {
         }
         return false;
     }
-    
+
 
 }
