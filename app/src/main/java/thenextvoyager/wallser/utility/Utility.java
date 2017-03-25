@@ -27,8 +27,6 @@ import java.net.URL;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.Data.ImageContract;
 
-import static thenextvoyager.wallser.utility.Utility.AsyncImageDownloader.TAG;
-
 
 /**
  * Created by Abhiroj on 3/6/2017.
@@ -96,7 +94,7 @@ public class Utility {
             Intent shareintent = new Intent(Intent.ACTION_SEND);
             shareintent.setType("*/*");
             shareintent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-            shareintent.putExtra(Intent.EXTRA_TEXT, "Hey! improve your phone wall with wallser!");
+            shareintent.putExtra(Intent.EXTRA_TEXT, "Hey! check new walls at wallser!");
             context.startActivity(Intent.createChooser(shareintent, "Share Using"));
         } else {
             Toast.makeText(context, "No image present!", Toast.LENGTH_SHORT).show();
