@@ -24,7 +24,7 @@ public class ImageActivity extends AppCompatActivity {
         DataModel object = (DataModel) bundle.getSerializable(MODEL_TAG);
 
         ImageFragment fragment = ImageFragment.newInstance(object);
-        getSupportFragmentManager().beginTransaction().add(R.id.image_frag_container, fragment, IMAGE_FRAGMENT_TAG).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().add(R.id.image_frag_container, fragment, IMAGE_FRAGMENT_TAG).commit();
     }
 
 

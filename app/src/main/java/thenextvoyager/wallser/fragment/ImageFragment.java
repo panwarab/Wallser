@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class ImageFragment extends Fragment {
 
     private static final String ARG_PARAM = "param2";
     DataModel object;
+    ImageView imageView;
     private boolean isImageInDatabase = false;
     private ContentResolver resolver;
     private FirebaseAnalytics analytics;
@@ -72,7 +74,7 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_image, container, false);
-        final ImageView imageView = (ImageView) rootView.findViewById(R.id.fragment_image);
+        imageView = (ImageView) rootView.findViewById(R.id.fragment_image);
         final FloatingActionButton downloadb = (FloatingActionButton) rootView.findViewById(R.id.download_button);
         downloadb.setImageResource(ic_file_download);
         downloadb.setVisibility(View.INVISIBLE);
@@ -97,16 +99,17 @@ public class ImageFragment extends Fragment {
         final ImageView share_button = (ImageView) rootView.findViewById(R.id.share_button);
 
         if (object != null) {
-            picasso(imageView, downloadb, favoriteb, wallpaperb, share_button, rootView);
+            picasso(downloadb, favoriteb, wallpaperb, share_button, rootView);
         }
 
         return rootView;
     }
 
-    private void picasso(final ImageView imageView, final FloatingActionButton downloadb, final FloatingActionButton favoriteb, final FloatingActionButton wallpaperb, final ImageView share_button, View rootView) {
+    private void picasso(final FloatingActionButton downloadb, final FloatingActionButton favoriteb, final FloatingActionButton wallpaperb, final ImageView share_button, View rootView) {
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                Log.d("Image Logs", "onBitmapLoaded");
                 Palette.generateAsync(bitmap, 3, new Palette.PaletteAsyncListener() {
                     @Override
                     public void onGenerated(Palette palette) {
@@ -183,15 +186,18 @@ public class ImageFragment extends Fragment {
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
+                Log.d("Image Logs", "onBitmapFailed");
                 imageView.setImageDrawable(errorDrawable);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.d("Image Logs", "onPrepareLoad");
                 imageView.setImageDrawable(placeHolderDrawable);
             }
         };
-        Picasso.with(rootView.getContext()).load(object.imageURL.trim()).error(R.drawable.placeholder1).placeholder(R.drawable.placeholder1).into(target);
+        imageView.setTag(target);
+        Picasso.with(rootView.getContext()).load(object.imageURL.trim()).error(R.drawable.sample).placeholder(R.drawable.placeholder1).into(target);
     }
 
     private void updateBooleanImageInDatabase() {
