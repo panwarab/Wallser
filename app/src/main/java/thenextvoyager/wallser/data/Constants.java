@@ -1,7 +1,8 @@
-package thenextvoyager.wallser.Data;
+package thenextvoyager.wallser.data;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -24,11 +25,15 @@ public class Constants {
     public static final String DATA_TAG = "DATA";
     public static final int PER_PAGE = 10;
     public static final String PAGEFRAG = "PAGEFRAGMENT";
+    public static final String TAG_TO_FRAG = "TagToFrag";
+    public static final String PAGE_NO = "pagenumber";
+    private static final String TAG = Constants.class.getSimpleName();
     public static String api_key;
     public static HashMap<String, Fragment> TagToFrag;
     Context context;
 
     public Constants(Context context) {
+        Log.d(TAG, "CONSTANTS OBJECT CREATED");
         this.context = context;
         api_key = context.getResources().getString(R.string.unsplash_api_key);
         TagToFrag = new HashMap<>();

@@ -9,9 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import thenextvoyager.wallser.Data.DataModel;
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.data.DataModel;
+import thenextvoyager.wallser.data.ImageContract;
 
 /**
  * Created by Abhiroj on 3/24/2017.

@@ -26,8 +26,8 @@
             android:theme="@style/FullScreenTheme" />
 
         <provider
-            android:name=".Data.ImageProvider"
-            android:authorities="thenextvoyager.wallser.Data"
+            android:name=".data.ImageProvider"
+            android:authorities="thenextvoyager.wallser.data"
             android:exported="false"
             android:protectionLevel="signature"
             android:syncable="true" />

@@ -1,4 +1,4 @@
-package thenextvoyager.wallser.Data;
+package thenextvoyager.wallser.data;
 
 import java.io.Serializable;
 

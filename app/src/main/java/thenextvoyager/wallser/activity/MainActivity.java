@@ -11,40 +11,51 @@
     import android.support.v4.widget.DrawerLayout;
     import android.support.v7.app.AppCompatActivity;
     import android.support.v7.widget.Toolbar;
+    import android.util.Log;
     import android.view.MenuItem;
     import android.view.View;
     import android.widget.TextView;
+    import android.widget.Toast;
 
     import com.google.android.gms.ads.AdRequest;
     import com.google.android.gms.ads.AdView;
 
-    import thenextvoyager.wallser.Data.Constants;
+    import java.util.ArrayList;
+
     import thenextvoyager.wallser.R;
     import thenextvoyager.wallser.adapter.SimpleFragmentPagerAdapter;
+    import thenextvoyager.wallser.callback.OnResultFetchedCallback;
+    import thenextvoyager.wallser.data.Constants;
+    import thenextvoyager.wallser.data.DataModel;
+    import thenextvoyager.wallser.fragment.PageFragment;
 
-    public class MainActivity extends AppCompatActivity {
+    import static thenextvoyager.wallser.data.Constants.PAGEFRAG;
+    import static thenextvoyager.wallser.data.Constants.TagToFrag;
 
+    public class MainActivity extends AppCompatActivity implements OnResultFetchedCallback {
+
+        private static String TAG = MainActivity.class.getSimpleName();
 
         AdView adView;
 
         DrawerLayout drawerLayout;
         NavigationView navigationView;
+        ViewPager viewPager;
+        TabLayout tabLayout;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             Constants constants = new Constants(getApplicationContext());
+            if (savedInstanceState != null) {
+                TagToFrag.put(PAGEFRAG, getSupportFragmentManager().getFragment(savedInstanceState, PAGEFRAG));
+            }
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             toolbar.setTitle(R.string.app_name);
             toolbar.setNavigationIcon(R.drawable.ic_menu);
             setSupportActionBar(toolbar);
-
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(new SimpleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
-            viewPager.setCurrentItem(0);
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-            tabLayout.setupWithViewPager(viewPager);
+            setUpViewPager();
 
             adView = (AdView) findViewById(R.id.adView);
             AdRequest adRequest = new AdRequest.Builder().build();
@@ -53,6 +64,14 @@
             drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             navigationView = (NavigationView) findViewById(R.id.nav_view);
             setUpNavigationView();
+        }
+
+        private void setUpViewPager() {
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            viewPager.setAdapter(new SimpleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+            viewPager.setCurrentItem(0);
+            tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+            tabLayout.setupWithViewPager(viewPager);
         }
 
         private void setUpNavigationView() {
@@ -95,5 +114,21 @@
             }
             drawerLayout.closeDrawers();
 
+        }
+
+        @Override
+        protected void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            getSupportFragmentManager().putFragment(outState, PAGEFRAG, TagToFrag.get(PAGEFRAG));
+        }
+
+        @Override
+        public void getData(ArrayList<DataModel> model) {
+            Log.d(TAG, "OnResultFetchedCallback Called with data size" + model.size());
+            PageFragment pagefragment = (PageFragment) TagToFrag.get(PAGEFRAG);
+            if (pagefragment != null)
+                pagefragment.addNewData(model);
+            else
+                Toast.makeText(MainActivity.this, TagToFrag.get(PAGEFRAG).toString(), Toast.LENGTH_SHORT).show();
         }
     }

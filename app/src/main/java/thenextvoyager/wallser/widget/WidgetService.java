@@ -12,8 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.data.ImageContract;
 
 public class WidgetService extends RemoteViewsService {
 

@@ -15,9 +15,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import thenextvoyager.wallser.Data.DataModel;
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.data.DataModel;
+import thenextvoyager.wallser.data.ImageContract;
 
 
 /**
@@ -112,21 +112,9 @@ public class Utility {
 
     public static boolean detectConnection(Context context) {
         if (context == null) return false;
-        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mobile_info = conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        NetworkInfo wifi_info = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (mobile_info == null || wifi_info == null) return false;
-        if (mobile_info.getState() == NetworkInfo.State.CONNECTED
-                || wifi_info.getState() == NetworkInfo.State.CONNECTED) {
-
-            return true;
-
-        } else if (mobile_info.getState() == NetworkInfo.State.DISCONNECTED
-                || wifi_info.getState() == NetworkInfo.State.DISCONNECTED) {
-
-            return false;
-        }
-        return false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
 

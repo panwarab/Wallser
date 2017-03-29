@@ -1,6 +1,5 @@
 package thenextvoyager.wallser.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,25 +15,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import thenextvoyager.wallser.Data.Constants;
-import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
-import thenextvoyager.wallser.callback.OnResultFetchedCallback;
 import thenextvoyager.wallser.callback.SortDialogCallback;
+import thenextvoyager.wallser.data.Constants;
+import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.network.FetchImageVolley;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
-import static thenextvoyager.wallser.Data.Constants.CHOICE_TAG;
-import static thenextvoyager.wallser.Data.Constants.DATA_TAG;
-import static thenextvoyager.wallser.Data.Constants.HANDLER_DELAY_TIME;
-import static thenextvoyager.wallser.Data.Constants.TagToFrag;
+import static thenextvoyager.wallser.data.Constants.CHOICE_TAG;
+import static thenextvoyager.wallser.data.Constants.DATA_TAG;
+import static thenextvoyager.wallser.data.Constants.HANDLER_DELAY_TIME;
+import static thenextvoyager.wallser.data.Constants.PAGE_NO;
+import static thenextvoyager.wallser.data.Constants.PER_PAGE;
+import static thenextvoyager.wallser.data.Constants.TagToFrag;
 import static thenextvoyager.wallser.utility.Utility.detectConnection;
 
 
@@ -41,14 +40,13 @@ import static thenextvoyager.wallser.utility.Utility.detectConnection;
  * Created by Abhiroj on 3/3/2017.
  */
 
-public class PageFragment extends Fragment implements SortDialogCallback, OnResultFetchedCallback {
+public class PageFragment extends Fragment implements SortDialogCallback {
 
+    private static final String TAG = PageFragment.class.getSimpleName();
     /**
      * Unsplash API, By Default=10
      */
-    private static final String per_page = "10";
     public static String order_By;
-    ProgressDialog dialog = null;
     FetchImageVolley imageVolley;
     Context context;
     /**
@@ -61,10 +59,12 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
     EndlessRecyclerViewScrollListener scrollListener;
     FrameLayout no_internet_container;
     Bundle savedInstanceState;
+    int page_no;
     // Attaching Handler to the main thread
-    Handler handler = makeHandler();
-    RequestQueue requestQueue;
+    Handler handler;
     boolean shouldHandlerRunAgain = true;
+    private boolean isConnected = detectConnection(getContext());
+    private ArrayList<DataModel> model;
     /**
      * Handler is attached to the Main Thread and it's message queue, because it is the one who created it.
      * <p>
@@ -84,9 +84,10 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
                 handler.postDelayed(job, HANDLER_DELAY_TIME);
         }
     };
-    private ArrayList<DataModel> model;
+
 
     public static PageFragment newInstance(String TAG) {
+        Log.d(TAG, "PAGE FRAGMENT CREATED, HERE YOU CAN DECIDE THE DEBUGGING DESTINY");
         PageFragment pageFragment = new PageFragment();
         TagToFrag.put(TAG, pageFragment);
         return pageFragment;
@@ -108,30 +109,48 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
         super.onSaveInstanceState(outState);
         imageVolley.cancelRequest(order_By);
         outState.putString(CHOICE_TAG, order_By);
-        if (model != null)
         outState.putSerializable(DATA_TAG, model);
+        outState.putInt(PAGE_NO, page_no);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (handler != null) {
+        if (!isConnected && model.size() == 0) {
             handler.post(job);
+        } else if (model.size() == 0) {
+            imageVolley.loadDataUsingVolley(PER_PAGE, page_no, order_By, true);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        imageVolley = new FetchImageVolley(context);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-        imageVolley = new FetchImageVolley(context);
-        imageAdapter = new ImageAdapter(getContext(), (model == null) ? new ArrayList<DataModel>() : model);
-        requestQueue = Volley.newRequestQueue(getContext());
+        isConnected = detectConnection(context);
+        handler = makeHandler();
+        if (savedInstanceState != null) {
+            model = (ArrayList<DataModel>) savedInstanceState.getSerializable(DATA_TAG);
+            order_By = savedInstanceState.getString(CHOICE_TAG);
+            page_no = savedInstanceState.getInt(PAGE_NO);
+        } else {
+            model = new ArrayList<>();
+            order_By = "latest";
+            page_no = 1;
+        }
+        imageAdapter = new ImageAdapter(getContext(), model);
         layoutManager = new GridLayoutManager(getContext(), 2);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page, order_By, false);
+                Toast.makeText(getContext(), "Page number " + page, Toast.LENGTH_SHORT).show();
+                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, false);
             }
         };
     }
@@ -157,10 +176,11 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
     @Override
     public void onPause() {
         super.onPause();
-        if (handler == null && !detectConnection(getContext()) && (model == null || model.size() == 0))
-            handler = makeHandler();
     }
 
+    /**
+     * This method will only be launched when our model has no data in it, and there is no internet, in such a case we check it regularly and if connection is present, we work from the start
+     */
     private void swapViews() {
         if (detectConnection(getContext()) == false) {
             recyclerView.setVisibility(View.INVISIBLE);
@@ -173,12 +193,10 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
             recyclerView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
             no_internet_container.setVisibility(View.INVISIBLE);
-            if (savedInstanceState != null) {
-                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, 1, savedInstanceState.getString(CHOICE_TAG), true);
-            } else {
                 order_By = "latest";
-                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, 1, order_By, true);
-            }
+            page_no = 1;
+            model.clear();
+            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, true);
         }
     }
 
@@ -196,6 +214,14 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
         recyclerView.setAdapter(imageAdapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(scrollListener);
+        if (isConnected) {
+            setHasOptionsMenu(true);
+            recyclerView.setVisibility(View.VISIBLE);
+            no_internet_container.setVisibility(View.INVISIBLE);
+        } else {
+            recyclerView.setVisibility(View.INVISIBLE);
+            no_internet_container.setVisibility(View.VISIBLE);
+        }
 
 
         return view;
@@ -210,18 +236,21 @@ public class PageFragment extends Fragment implements SortDialogCallback, OnResu
      */
     @Override
     public void onDialogFinish(String order_by) {
-        if(model!=null)
-        model.clear();
-        imageAdapter.swapDataSet(model);
+        imageAdapter.clearDataSet();
         scrollListener.resetState();
         imageVolley.cancelRequest(order_By);
         order_By = order_by;
-        imageVolley.loadDataUsingVolley(Constants.PER_PAGE, 1, order_By, true);
+        page_no = 1;
+        imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, true);
     }
 
-    @Override
-    public void getData(ArrayList<DataModel> model) {
-        this.model = model;
-        imageAdapter.swapDataSet(model);
+
+    public void addNewData(ArrayList<DataModel> incomingmodel) {
+        if (imageAdapter != null) {
+            imageAdapter.addNewData(incomingmodel);
+        } else {
+            Toast.makeText(context, "Image Adapter is Null", Toast.LENGTH_SHORT).show();
+        }
     }
+
 }

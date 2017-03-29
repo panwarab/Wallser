@@ -15,12 +15,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.activity.ImageActivity;
+import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.viewholder.ViewHolder;
 
-import static thenextvoyager.wallser.Data.Constants.MODEL_TAG;
+import static thenextvoyager.wallser.data.Constants.MODEL_TAG;
 
 /**
  * Created by Abhiroj on 3/4/2017.
@@ -37,9 +37,15 @@ public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.model = model;
     }
 
-    public void swapDataSet(ArrayList<DataModel> updatedData) {
+    public void addNewData(ArrayList<DataModel> updatedData) {
+        for (int i = 0; i < updatedData.size(); i++) {
+            model.add(updatedData.get(i));
+        }
+        notifyDataSetChanged();
+    }
+
+    public void clearDataSet() {
         model.clear();
-        model.addAll(updatedData);
         notifyDataSetChanged();
     }
 

@@ -8,9 +8,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import thenextvoyager.wallser.Data.DataModel;
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.data.DataModel;
+import thenextvoyager.wallser.data.ImageContract;
+import thenextvoyager.wallser.utility.Utility;
 
 /**
  * Created by Abhiroj on 3/23/2017.
@@ -35,6 +36,8 @@ public class AddDataTask extends AsyncTask<DataModel, Void, Boolean> {
     protected Boolean doInBackground(DataModel... dataModels) {
         try {
             DataModel object = dataModels[0];
+            if (Utility.checkIfImageIsInDatabase(resolver, ImageContract.ImageEntry.COLUMN_NAME, object.name))
+                return false;
             ContentValues contentValues = new ContentValues();
             contentValues.put(ImageContract.ImageEntry.COLUMN_NAME, object.name);
             contentValues.put(ImageContract.ImageEntry.COLUMN_REGURL, object.imageURL);

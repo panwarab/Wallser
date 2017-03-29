@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import thenextvoyager.wallser.Data.Constants;
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.FavoritesAdapter;
+import thenextvoyager.wallser.data.Constants;
+import thenextvoyager.wallser.data.ImageContract;
 
 /**
  * A simple {@link Fragment} subclass.

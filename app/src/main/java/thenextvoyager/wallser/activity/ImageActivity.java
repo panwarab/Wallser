@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.fragment.ImageFragment;
 
-import static thenextvoyager.wallser.Data.Constants.IMAGE_FRAGMENT_TAG;
-import static thenextvoyager.wallser.Data.Constants.MODEL_TAG;
+import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
+import static thenextvoyager.wallser.data.Constants.MODEL_TAG;
 
 
 public class ImageActivity extends AppCompatActivity {

@@ -24,17 +24,17 @@ import com.squareup.picasso.Target;
 
 import java.io.IOException;
 
-import thenextvoyager.wallser.Data.DataModel;
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.asynctasks.AddDataTask;
 import thenextvoyager.wallser.asynctasks.DeleteDataTask;
+import thenextvoyager.wallser.data.DataModel;
+import thenextvoyager.wallser.data.ImageContract;
 import thenextvoyager.wallser.utility.Utility;
 
-import static thenextvoyager.wallser.Data.Constants.IMAGE_FRAGMENT_TAG;
 import static thenextvoyager.wallser.R.drawable.ic_favorite;
 import static thenextvoyager.wallser.R.drawable.ic_file_download;
 import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
+import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
 
 
 /**

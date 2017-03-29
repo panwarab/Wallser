@@ -3,6 +3,7 @@ package thenextvoyager.wallser.network;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,11 +19,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.callback.OnResultFetchedCallback;
+import thenextvoyager.wallser.data.DataModel;
 
-import static thenextvoyager.wallser.Data.Constants.api_key;
+import static thenextvoyager.wallser.data.Constants.api_key;
 import static thenextvoyager.wallser.fragment.PageFragment.order_By;
 
 /**
@@ -31,15 +32,24 @@ import static thenextvoyager.wallser.fragment.PageFragment.order_By;
 
 public class FetchImageVolley {
 
+    private static String TAG = FetchImageVolley.class.getSimpleName();
     Context context;
     Dialog dialog;
+    OnResultFetchedCallback fetchedCallback;
     RequestQueue requestQueue;
 
     public FetchImageVolley(Context context) {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
+        fetchedCallback = (OnResultFetchedCallback) context;
     }
 
+    /**
+     * @param per_page                 By Default, set to 10.
+     * @param page                     Current page number of querying API
+     * @param order_by                 Two options, latest or popular
+     * @param shouldShowProgressDialog Don't show loading if it is not the first request
+     */
     public void loadDataUsingVolley(int per_page, int page, String order_by, boolean shouldShowProgressDialog) {
         if (shouldShowProgressDialog) {
             dialog = ProgressDialog.show(context, "Wallser", "Loading");
@@ -48,7 +58,6 @@ public class FetchImageVolley {
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray array) {
-                OnResultFetchedCallback fetchedCallback = (OnResultFetchedCallback) context;
                 int len = array.length();
                 ArrayList<DataModel> model = new ArrayList<>();
                 for (int i = 0; i < len; i++) {
@@ -86,14 +95,15 @@ public class FetchImageVolley {
     }
 
     public void cancelRequest(String TAG) {
-        if (dialog != null) dialog.cancel();
-        if (TAG != null)
+        if (TAG != null && requestQueue != null) {
+            Log.d(FetchImageVolley.TAG,"Request Queue Destroyed");
             requestQueue.cancelAll(TAG);
-        requestQueue = null;
-        context = null;
+        }
     }
 
     public void destroyRelyingObjects() {
-        cancelRequest(null);
+        if (dialog != null) dialog.cancel();
+        fetchedCallback=null;
+        context=null;
     }
 }

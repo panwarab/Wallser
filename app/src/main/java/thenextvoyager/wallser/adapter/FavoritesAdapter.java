@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
 
-import thenextvoyager.wallser.Data.DataModel;
-import thenextvoyager.wallser.Data.ImageContract;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.activity.ImageActivity;
+import thenextvoyager.wallser.data.DataModel;
+import thenextvoyager.wallser.data.ImageContract;
 import thenextvoyager.wallser.utility.CursorRecyclerViewAdapter;
 import thenextvoyager.wallser.viewholder.ViewHolder;
 
-import static thenextvoyager.wallser.Data.Constants.MODEL_TAG;
+import static thenextvoyager.wallser.data.Constants.MODEL_TAG;
 import static thenextvoyager.wallser.utility.Utility.makeDataModelFromCursor;
 
 /**
