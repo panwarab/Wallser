@@ -60,6 +60,12 @@ public class ImageFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        imageView = null;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {

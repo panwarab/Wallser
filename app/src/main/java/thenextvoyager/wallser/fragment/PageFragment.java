@@ -15,31 +15,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import thenextvoyager.wallser.Data.Constants;
 import thenextvoyager.wallser.Data.DataModel;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
+import thenextvoyager.wallser.callback.OnResultFetchedCallback;
 import thenextvoyager.wallser.callback.SortDialogCallback;
+import thenextvoyager.wallser.network.FetchImageVolley;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 import static thenextvoyager.wallser.Data.Constants.CHOICE_TAG;
 import static thenextvoyager.wallser.Data.Constants.DATA_TAG;
 import static thenextvoyager.wallser.Data.Constants.HANDLER_DELAY_TIME;
-import static thenextvoyager.wallser.Data.Constants.api_key;
+import static thenextvoyager.wallser.Data.Constants.TagToFrag;
 import static thenextvoyager.wallser.utility.Utility.detectConnection;
 
 
@@ -47,7 +41,7 @@ import static thenextvoyager.wallser.utility.Utility.detectConnection;
  * Created by Abhiroj on 3/3/2017.
  */
 
-public class PageFragment extends Fragment implements SortDialogCallback {
+public class PageFragment extends Fragment implements SortDialogCallback, OnResultFetchedCallback {
 
     /**
      * Unsplash API, By Default=10
@@ -55,6 +49,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     private static final String per_page = "10";
     public static String order_By;
     ProgressDialog dialog = null;
+    FetchImageVolley imageVolley;
     Context context;
     /**
      * Unsplash API call parameter, By Default=latest
@@ -70,7 +65,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     Handler handler = makeHandler();
     RequestQueue requestQueue;
     boolean shouldHandlerRunAgain = true;
-    private ArrayList<DataModel> model;
     /**
      * Handler is attached to the Main Thread and it's message queue, because it is the one who created it.
      * <p>
@@ -90,6 +84,20 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 handler.postDelayed(job, HANDLER_DELAY_TIME);
         }
     };
+    private ArrayList<DataModel> model;
+
+    public static PageFragment newInstance(String TAG) {
+        PageFragment pageFragment = new PageFragment();
+        TagToFrag.put(TAG, pageFragment);
+        return pageFragment;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        imageVolley.destroyRelyingObjects();
+        imageVolley = null;
+    }
 
     private Handler makeHandler() {
         return new Handler();
@@ -98,10 +106,9 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (dialog != null) {
-            dialog.cancel();
-        }
+        imageVolley.cancelRequest(order_By);
         outState.putString(CHOICE_TAG, order_By);
+        if (model != null)
         outState.putSerializable(DATA_TAG, model);
     }
 
@@ -117,8 +124,16 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        imageVolley = new FetchImageVolley(context);
+        imageAdapter = new ImageAdapter(getContext(), (model == null) ? new ArrayList<DataModel>() : model);
         requestQueue = Volley.newRequestQueue(getContext());
         layoutManager = new GridLayoutManager(getContext(), 2);
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page, order_By, false);
+            }
+        };
     }
 
     @Override
@@ -159,25 +174,12 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             setHasOptionsMenu(true);
             no_internet_container.setVisibility(View.INVISIBLE);
             if (savedInstanceState != null) {
-                loadDataUsingVolley(1, savedInstanceState.getString(CHOICE_TAG), true);
+                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, 1, savedInstanceState.getString(CHOICE_TAG), true);
             } else {
                 order_By = "latest";
-                loadDataUsingVolley(1, order_By, true);
+                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, 1, order_By, true);
             }
         }
-    }
-
-    /**
-     * Call to this function attaches a new scroll listener
-     */
-    private void attachScrollListener() {
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadDataUsingVolley(page, order_By, false);
-            }
-        };
-        recyclerView.addOnScrollListener(scrollListener);
     }
 
 
@@ -191,60 +193,15 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         no_internet_container = (FrameLayout) view.findViewById(R.id.no_internet_container);
-        imageAdapter = new ImageAdapter(getContext(), (model == null) ? new ArrayList<DataModel>() : model);
         recyclerView.setAdapter(imageAdapter);
         recyclerView.setLayoutManager(layoutManager);
-        attachScrollListener();
+        recyclerView.addOnScrollListener(scrollListener);
 
 
         return view;
     }
 
-    void loadDataUsingVolley(int page, String order_by, boolean shouldShowProgressDialog) {
-        if (shouldShowProgressDialog) {
-            dialog = ProgressDialog.show(getContext(), "Wallser", "Loading");
-        }
-        String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
-        final ProgressDialog finalDialog = dialog;
-        JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray array) {
-                int len = array.length();
-                if (model == null)
-                model = new ArrayList<>();
-                for (int i = 0; i < len; i++) {
-                    try {
-                        JSONObject object = array.getJSONObject(i);
-                        String id = object.getString("id");
-                        JSONObject object1 = object.getJSONObject("urls");
-                        String imageURL = object1.getString("regular");
-                        JSONObject object2 = object.getJSONObject("links");
-                        String downloadURL = object2.getString("download");
-                        model.add(new DataModel(imageURL, downloadURL, id));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
 
-                if (finalDialog != null) {
-                    finalDialog.dismiss();
-                }
-                if (model != null)
-                imageAdapter.swapDataSet(model);
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (finalDialog != null) finalDialog.dismiss();
-                if (context != null)
-                    Toast.makeText(context, R.string.connissue, Toast.LENGTH_SHORT).show();
-            }
-        });
-        objectRequest.setTag(order_By);
-        requestQueue.add(objectRequest);
-    }
 
     /**
      * marks a new network call to Unsplash API
@@ -257,8 +214,14 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         model.clear();
         imageAdapter.swapDataSet(model);
         scrollListener.resetState();
-        requestQueue.cancelAll(order_By);
+        imageVolley.cancelRequest(order_By);
         order_By = order_by;
-        loadDataUsingVolley(1, order_By, true);
+        imageVolley.loadDataUsingVolley(Constants.PER_PAGE, 1, order_By, true);
+    }
+
+    @Override
+    public void getData(ArrayList<DataModel> model) {
+        this.model = model;
+        imageAdapter.swapDataSet(model);
     }
 }

@@ -21,7 +21,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -42,7 +42,9 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-ads:10.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta3'
     testCompile 'junit:junit:4.12'
 }
+
 
 apply plugin: 'com.google.gms.google-services'

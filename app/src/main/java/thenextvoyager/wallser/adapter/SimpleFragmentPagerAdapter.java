@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import thenextvoyager.wallser.fragment.FavoritesFragment;
 import thenextvoyager.wallser.fragment.PageFragment;
 
+import static thenextvoyager.wallser.Data.Constants.PAGEFRAG;
+
 /**
  * Created by Abhiroj on 3/3/2017.
  */
@@ -27,7 +29,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0)
-            return new PageFragment();
+            return PageFragment.newInstance(PAGEFRAG);
         else
             return new FavoritesFragment();
     }

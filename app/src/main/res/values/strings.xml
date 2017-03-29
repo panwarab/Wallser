@@ -32,4 +32,6 @@
     <string name="no_image_present">No Image Present!</string>
     <string name="connissue">Connectivity Problem!</string>
     <string name="loading_images">Loading...</string>
+    <string name="text_hint">Voyager</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
 </resources>
