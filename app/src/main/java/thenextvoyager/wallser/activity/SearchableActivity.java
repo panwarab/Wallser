@@ -4,24 +4,77 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+
+import java.util.ArrayList;
 
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.adapter.ImageAdapter;
+import thenextvoyager.wallser.callback.OnResultFetchedCallback;
+import thenextvoyager.wallser.data.Constants;
+import thenextvoyager.wallser.data.DataModel;
+import thenextvoyager.wallser.network.FetchImageVolley;
+import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
-public class SearchableActivity extends AppCompatActivity {
+public class SearchableActivity extends AppCompatActivity implements OnResultFetchedCallback {
+
+
+    private static final String TAG = SearchableActivity.class.getSimpleName();
+    private int page;
+    private String query;
+    private FetchImageVolley imageVolley;
+    private RecyclerView recyclerView;
+    private ArrayList<DataModel> model;
+    private ImageAdapter imageAdapter;
+    private GridLayoutManager layoutManager;
+    private EndlessRecyclerViewScrollListener scrollLstener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
+            query = intent.getStringExtra(SearchManager.QUERY);
+            toolbar.setTitle(query);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            imageVolley = new FetchImageVolley(SearchableActivity.this);
+            page = 1;
+            imageVolley.loadDataForQuery(Constants.PER_PAGE, page, query);
         }
+        model = new ArrayList<>();
+        recyclerView = (RecyclerView) findViewById(R.id.grid_recycler);
+        imageAdapter = new ImageAdapter(SearchableActivity.this, model);
+        layoutManager = new GridLayoutManager(SearchableActivity.this, 2);
+        scrollLstener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (imageVolley != null) {
+                    SearchableActivity.this.page = page;
+                    imageVolley.loadDataForQuery(Constants.PER_PAGE, SearchableActivity.this.page, query);
+                }
+            }
+        };
+        recyclerView.setAdapter(imageAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(scrollLstener);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public void getData(ArrayList<DataModel> model) {
+        Log.d(TAG, "Searchable Activity getData called for page number = " + page);
+        imageAdapter.addNewData(model);
+    }
 }

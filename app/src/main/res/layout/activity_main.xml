@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,14 +24,16 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name" />
-
+                android:contentDescription="@string/app_name"
+                android:theme="@style/ToolbarCustom" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/sliding_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabMode="fixed" />
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/solid_text_color"
+                app:tabTextColor="@color/fade_taxt_color" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -58,7 +60,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start|left"
         android:background="@android:color/white"
-        app:itemTextColor="@color/colorPrimary"
+        app:itemTextColor="@color/solid_text_color"
         app:menu="@menu/drawer_view" />
 
 </android.support.v4.widget.DrawerLayout>

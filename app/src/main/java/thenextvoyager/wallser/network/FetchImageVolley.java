@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -96,14 +97,50 @@ public class FetchImageVolley {
 
     public void cancelRequest(String TAG) {
         if (TAG != null && requestQueue != null) {
-            Log.d(FetchImageVolley.TAG,"Request Queue Destroyed");
+            Log.d(FetchImageVolley.TAG, "Request Queue Destroyed");
             requestQueue.cancelAll(TAG);
         }
     }
 
     public void destroyRelyingObjects() {
         if (dialog != null) dialog.cancel();
-        fetchedCallback=null;
-        context=null;
+        fetchedCallback = null;
+        context = null;
+    }
+
+    public void loadDataForQuery(int per_page, int page, String query) {
+        String URL = "https://api.unsplash.com/search/photos?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&query=" + query;
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("results");
+                    ArrayList<DataModel> queryModel = new ArrayList<>();
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        String name = object.getString("id");
+                        JSONObject object1 = object.getJSONObject("urls");
+                        String imageURL = object1.getString("regular");
+                        JSONObject object2 = object.getJSONObject("links");
+                        String downloadURL = object2.getString("download");
+                        DataModel dataModel = new DataModel(imageURL, downloadURL, name);
+                        queryModel.add(dataModel);
+                    }
+                    if (queryModel.size() != 0) {
+                        OnResultFetchedCallback fetchedCallback = (OnResultFetchedCallback) context;
+                        fetchedCallback.getData(queryModel);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        jsonArrayRequest.setTag(query);
+        requestQueue.add(jsonArrayRequest);
     }
 }

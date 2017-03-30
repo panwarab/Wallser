@@ -21,12 +21,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="@color/solid_text_color"
             android:textSize="24sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nav_message"
+            android:textColor="@color/fade_taxt_color"
             android:textSize="10sp" />
 
 

@@ -20,6 +20,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activity.SearchableActivity" />
         </activity>
         <activity
             android:name=".activity.ImageActivity"

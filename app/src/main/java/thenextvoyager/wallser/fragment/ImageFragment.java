@@ -135,6 +135,7 @@ public class ImageFragment extends Fragment {
                 downloadb.setVisibility(View.VISIBLE);
                 favoriteb.setVisibility(View.VISIBLE);
                 wallpaperb.setVisibility(View.VISIBLE);
+                if (imageView != null)
                 imageView.setImageBitmap(bitmap);
                 favoriteb.setOnClickListener(new View.OnClickListener() {
                     @Override
