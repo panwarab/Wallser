@@ -76,7 +76,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
             }
         });
 
-        Picasso.with(context).load(model.get(position).imageURL.trim()).error(R.drawable.placeholder1).placeholder(R.drawable.placeholder1).resize(200, 200).centerCrop().into(holder.image);
+        Picasso.with(context).load(model.get(position).imageURL.trim()).error(R.drawable.placeholder1).placeholder(R.drawable.placeholder1).resize(800, 800).centerCrop().into(holder.image);
 
     }
 

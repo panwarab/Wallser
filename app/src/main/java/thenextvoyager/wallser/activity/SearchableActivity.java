@@ -51,7 +51,7 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
         model = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.grid_recycler);
         imageAdapter = new ImageAdapter(SearchableActivity.this, model);
-        layoutManager = new GridLayoutManager(SearchableActivity.this, 2);
+        layoutManager = new GridLayoutManager(SearchableActivity.this, 1);
         scrollLstener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {

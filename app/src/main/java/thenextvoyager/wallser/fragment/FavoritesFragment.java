@@ -72,7 +72,7 @@ public class FavoritesFragment extends Fragment {
         empty_view_cont.setVisibility(View.VISIBLE);
         view1 = (RecyclerView) view.findViewById(R.id.recyclerview_favorite);
         view1.setVisibility(View.INVISIBLE);
-        view1.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        view1.setLayoutManager(new GridLayoutManager(getContext(), 1));
         favoritesAdapter = new FavoritesAdapter(getContext(), null);
         view1.setAdapter(favoritesAdapter);
         return view;

@@ -145,7 +145,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
             page_no = 1;
         }
         imageAdapter = new ImageAdapter(getContext(), model);
-        layoutManager = new GridLayoutManager(getContext(), 2);
+        layoutManager = new GridLayoutManager(getContext(), 1);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
