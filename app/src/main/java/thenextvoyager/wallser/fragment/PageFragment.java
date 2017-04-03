@@ -118,8 +118,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         super.onResume();
         if (!isConnected && model.size() == 0) {
             handler.post(job);
-        } else if (model.size() == 0) {
-            imageVolley.loadDataUsingVolley(PER_PAGE, page_no, order_By, true);
         }
     }
 
@@ -135,24 +133,27 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         context = getContext();
         isConnected = detectConnection(context);
         handler = makeHandler();
-        if (savedInstanceState != null) {
-            model = (ArrayList<DataModel>) savedInstanceState.getSerializable(DATA_TAG);
-            order_By = savedInstanceState.getString(CHOICE_TAG);
-            page_no = savedInstanceState.getInt(PAGE_NO);
-        } else {
-            model = new ArrayList<>();
-            order_By = "latest";
-            page_no = 1;
-        }
-        imageAdapter = new ImageAdapter(getContext(), model);
         layoutManager = new GridLayoutManager(getContext(), 1);
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Toast.makeText(getContext(), "Page number " + page, Toast.LENGTH_SHORT).show();
-                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, false);
+                page_no=page;
+                Toast.makeText(getContext(), "Page number " + page_no, Toast.LENGTH_SHORT).show();
+                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, (page_no==1)?true:false);
             }
         };
+        if (savedInstanceState != null) {
+            model = (ArrayList<DataModel>) savedInstanceState.getSerializable(DATA_TAG);
+            order_By = savedInstanceState.getString(CHOICE_TAG);
+            page_no = savedInstanceState.getInt(PAGE_NO);
+            scrollListener.setStateAfterConfigChange(page_no,model.size());
+        } else {
+            model = new ArrayList<>();
+            order_By = "latest";
+            page_no = 1;
+            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, (page_no==1)?true:false);
+        }
+        imageAdapter = new ImageAdapter(getContext(), model);
     }
 
     @Override
@@ -196,7 +197,7 @@ public class PageFragment extends Fragment implements SortDialogCallback {
                 order_By = "latest";
             page_no = 1;
             model.clear();
-            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, true);
+            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, (page_no==1)?true:false);
         }
     }
 
