@@ -1,7 +1,6 @@
 # Wallser
 A wallpaper browsing and downloading app
 
-Download the <a href="https://drive.google.com/file/d/0B3RSnegdFaaFQzNHMkx5N01KS2M/view?usp=sharing">current apk-release</a>
 
 ## API Key Set-up
 
