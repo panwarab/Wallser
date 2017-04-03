@@ -38,13 +38,13 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
     </FrameLayout>
 
-
     <LinearLayout
         android:id="@+id/fab_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginBottom="?android:attr/actionBarSize"
+        android:visibility="invisible"
         android:weightSum="3">
         <Space
             android:layout_width="0dp"
@@ -77,6 +77,23 @@
             android:contentDescription="@string/wallpaper_button"
             app:fabSize="auto" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|right"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:layout_marginRight="16dp"
+        app:layout_anchorGravity="bottom|end|right">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/material_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_navigation"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="auto" />
     </LinearLayout>
 
 
