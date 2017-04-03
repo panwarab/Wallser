@@ -4,8 +4,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
+    private static final String TAG = EndlessRecyclerViewScrollListener.class.getSimpleName();
     RecyclerView.LayoutManager mLayoutManager;
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -27,6 +29,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         this.mLayoutManager = layoutManager;
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
     }
+
 
     public EndlessRecyclerViewScrollListener(StaggeredGridLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
@@ -89,6 +92,15 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             onLoadMore(currentPage, totalItemCount, view);
             loading = true;
         }
+    }
+
+    public void setStateAfterConfigChange(int current_page,int totalitems)
+    {
+        Log.w(TAG,"Saving Configuration State");
+        this.startingPageIndex=current_page+1;
+        this.currentPage=startingPageIndex;
+        previousTotalItemCount=totalitems;
+        this.loading=false;
     }
 
     // Call this method whenever performing new searches
