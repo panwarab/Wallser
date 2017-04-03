@@ -1,40 +1,27 @@
 package thenextvoyager.wallser.fragment;
 
 
-import android.app.WallpaperManager;
 import android.content.ContentResolver;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
-
 import thenextvoyager.wallser.R;
-import thenextvoyager.wallser.asynctasks.AddDataTask;
-import thenextvoyager.wallser.asynctasks.DeleteDataTask;
 import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.data.ImageContract;
 import thenextvoyager.wallser.utility.Utility;
-
-import static thenextvoyager.wallser.R.drawable.ic_favorite;
-import static thenextvoyager.wallser.R.drawable.ic_file_download;
-import static thenextvoyager.wallser.R.drawable.ic_wallpaper;
-import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
 
 
 /**
@@ -45,6 +32,7 @@ import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
 public class ImageFragment extends Fragment {
 
     private static final String ARG_PARAM = "param2";
+    private static final String TAG = ImageFragment.class.getSimpleName();
     DataModel object;
     ImageView imageView;
     private boolean isImageInDatabase = false;
@@ -81,17 +69,7 @@ public class ImageFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_image, container, false);
         imageView = (ImageView) rootView.findViewById(R.id.fragment_image);
-        final FloatingActionButton downloadb = (FloatingActionButton) rootView.findViewById(R.id.download_button);
-        downloadb.setImageResource(ic_file_download);
-        downloadb.setVisibility(View.INVISIBLE);
-        final FloatingActionButton favoriteb = (FloatingActionButton) rootView.findViewById(R.id.favorite_button);
-        if (isImageInDatabase) favoriteb.setImageResource(R.drawable.ic_favorite_filled);
-        else
-        favoriteb.setImageResource(ic_favorite);
-        favoriteb.setVisibility(View.INVISIBLE);
-        final FloatingActionButton wallpaperb = (FloatingActionButton) rootView.findViewById(R.id.wallpaper_button);
-        wallpaperb.setImageResource(ic_wallpaper);
-        wallpaperb.setVisibility(View.INVISIBLE);
+
         ImageView close_button = (ImageView) rootView.findViewById(R.id.cross_button);
         close_button.setOnClickListener(
                 new View.OnClickListener() {
@@ -103,41 +81,49 @@ public class ImageFragment extends Fragment {
         );
 
         final ImageView share_button = (ImageView) rootView.findViewById(R.id.share_button);
-
+        FloatingActionButton material_fab = (FloatingActionButton) rootView.findViewById(R.id.material_fab);
+        View scrollView = rootView.findViewById(R.id.scroll_view);
+        final BottomSheetBehavior sheetBehavior = BottomSheetBehavior.from(scrollView);
+        sheetBehavior.setPeekHeight(0);
+        Log.d(TAG, sheetBehavior.toString());
+        material_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.material_fab:
+                        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        break;
+                }
+            }
+        });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.fragment_image:
+                        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                        else
+                            getActivity().supportFinishAfterTransition();
+                        break;
+                }
+            }
+        });
         if (object != null) {
-            picasso(downloadb, favoriteb, wallpaperb, share_button, rootView);
+            picasso(share_button, rootView);
         }
 
         return rootView;
     }
 
-    private void picasso(final FloatingActionButton downloadb, final FloatingActionButton favoriteb, final FloatingActionButton wallpaperb, final ImageView share_button, View rootView) {
+    private void picasso(final ImageView share_button, View rootView) {
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 Log.d("Image Logs", "onBitmapLoaded");
-                Palette.generateAsync(bitmap, 3, new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(Palette palette) {
-                        int color = palette.getDominantColor(Color.BLACK);
-                        if (color == Color.BLACK)
-                            color = palette.getVibrantColor(Color.BLACK);
-                        if (color == Color.BLACK)
-                            color = palette.getDarkVibrantColor(Color.BLACK);
-                        if (color == Color.BLACK)
-                            color = palette.getMutedColor(Color.BLACK);
-
-                        downloadb.setBackgroundTintList(ColorStateList.valueOf(color));
-                        favoriteb.setBackgroundTintList(ColorStateList.valueOf(color));
-                        wallpaperb.setBackgroundTintList(ColorStateList.valueOf(color));
-                    }
-                });
-                downloadb.setVisibility(View.VISIBLE);
-                favoriteb.setVisibility(View.VISIBLE);
-                wallpaperb.setVisibility(View.VISIBLE);
                 if (imageView != null)
                 imageView.setImageBitmap(bitmap);
-                favoriteb.setOnClickListener(new View.OnClickListener() {
+           /*     favoriteb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -178,7 +164,7 @@ public class ImageFragment extends Fragment {
                         }
                     }
 
-                });
+                });*/
                 share_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
