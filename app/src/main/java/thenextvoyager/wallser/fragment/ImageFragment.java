@@ -1,6 +1,7 @@
 package thenextvoyager.wallser.fragment;
 
 
+import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -13,15 +14,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.IOException;
+
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.asynctasks.AddDataTask;
+import thenextvoyager.wallser.asynctasks.DeleteDataTask;
 import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.data.ImageContract;
 import thenextvoyager.wallser.utility.Utility;
+
+import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
 
 
 /**
@@ -38,6 +46,9 @@ public class ImageFragment extends Fragment {
     private boolean isImageInDatabase = false;
     private ContentResolver resolver;
     private FirebaseAnalytics analytics;
+    private ImageView downloadb;
+    private ImageView favoriteb;
+    private ImageView wallpaperb;
 
     public static ImageFragment newInstance(DataModel object) {
         ImageFragment fragment = new ImageFragment();
@@ -85,6 +96,13 @@ public class ImageFragment extends Fragment {
         View scrollView = rootView.findViewById(R.id.scroll_view);
         final BottomSheetBehavior sheetBehavior = BottomSheetBehavior.from(scrollView);
         sheetBehavior.setPeekHeight(0);
+        downloadb = (ImageView) rootView.findViewById(R.id.download_button);
+        favoriteb = (ImageView) rootView.findViewById(R.id.favorite_button);
+        if (isImageInDatabase)
+            favoriteb.setImageResource(R.drawable.ic_favorite_filled);
+        else
+            favoriteb.setImageResource(R.drawable.ic_favorite_border);
+        wallpaperb = (ImageView) rootView.findViewById(R.id.wallpaper_button);
         Log.d(TAG, sheetBehavior.toString());
         material_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +127,7 @@ public class ImageFragment extends Fragment {
                 }
             }
         });
+
         if (object != null) {
             picasso(share_button, rootView);
         }
@@ -123,7 +142,7 @@ public class ImageFragment extends Fragment {
                 Log.d("Image Logs", "onBitmapLoaded");
                 if (imageView != null)
                 imageView.setImageBitmap(bitmap);
-           /*     favoriteb.setOnClickListener(new View.OnClickListener() {
+                favoriteb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -164,7 +183,7 @@ public class ImageFragment extends Fragment {
                         }
                     }
 
-                });*/
+                });
                 share_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

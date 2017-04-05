@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import thenextvoyager.wallser.R;
@@ -22,9 +22,9 @@ public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
     Fragment fragment;
     Context context;
     ContentResolver resolver;
-    FloatingActionButton favoriteb;
+    ImageView favoriteb;
 
-    public DeleteDataTask(Fragment fragment, FloatingActionButton favoriteb) {
+    public DeleteDataTask(Fragment fragment, ImageView favoriteb) {
         this.fragment = fragment;
         this.context = fragment.getContext();
         resolver = context.getContentResolver();
@@ -35,7 +35,7 @@ public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         if (aBoolean) {
-            favoriteb.setImageResource(R.drawable.ic_favorite);
+            favoriteb.setImageResource(R.drawable.ic_favorite_border);
             fragment.getActivity().finish();
             fragment.getActivity().overridePendingTransition(R.anim.left_in, R.anim.right_out);
         } else {

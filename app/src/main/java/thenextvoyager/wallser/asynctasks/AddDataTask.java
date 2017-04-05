@@ -4,8 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import thenextvoyager.wallser.R;
@@ -22,9 +22,9 @@ public class AddDataTask extends AsyncTask<DataModel, Void, Boolean> {
     Fragment fragment;
     Context context;
     ContentResolver resolver;
-    FloatingActionButton favorite;
+    ImageView favorite;
 
-    public AddDataTask(Fragment fragment, FloatingActionButton favorite) {
+    public AddDataTask(Fragment fragment, ImageView favorite) {
         super();
         this.fragment = fragment;
         context = fragment.getContext();

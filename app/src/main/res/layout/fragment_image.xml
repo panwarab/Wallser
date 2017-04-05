@@ -42,8 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end|right"
-        android:layout_marginBottom="?android:attr/actionBarSize"
-        android:layout_marginRight="16dp"
+        android:layout_margin="16dp"
         app:layout_anchorGravity="bottom|end|right">
 
         <android.support.design.widget.FloatingActionButton
@@ -58,9 +57,10 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:elevation="100dp"
+        android:fillViewport="true"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
@@ -74,9 +74,9 @@
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
-                android:paddingTop="10dp">
+                android:paddingTop="5dp">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -96,14 +96,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="deom" />
+                        android:lineSpacingMultiplier="@dimen/text_space"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <TextView
                         android:id="@+id/url"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="@string/UnsplashUrl" />
+                        android:text="@string/UnsplashUrl"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -111,7 +114,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp">
 
                 <android.support.v4.widget.Space
                     android:layout_width="0dp"
@@ -119,6 +124,7 @@
                     android:layout_weight="0.75" />
 
                 <ImageView
+                    android:id="@+id/favorite_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -130,6 +136,7 @@
                     android:layout_weight="0.75" />
 
                 <ImageView
+                    android:id="@+id/download_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -141,6 +148,7 @@
                     android:layout_weight="0.75" />
 
                 <ImageView
+                    android:id="@+id/wallpaper_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
