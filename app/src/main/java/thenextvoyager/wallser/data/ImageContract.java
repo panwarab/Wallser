@@ -28,6 +28,9 @@ public class ImageContract {
         public static final String COLUMN_NAME = "imageName";
         public static final String COLUMN_REGURL = "imageRegUrl";
         public static final String COLUMN_DLDURL = "imageDldUrl";
+        public static final String COLUMN_USERNAME = "username";
+        public static final String COLUMN_PORTFOLIOURL = "portfoliourl";
+        public static final String COLUMN_PROFILEIMAGE = "profileimage";
 
         // Uri appended with to find an image by identifier
         public static Uri buildImageuri(long id) {

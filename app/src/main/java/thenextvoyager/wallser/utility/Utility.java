@@ -95,7 +95,7 @@ public class Utility {
      * @param resolver
      * @param COLUMN_NAME
      * @param param1
-     * @return
+     * @return Boolean
      */
     public static boolean checkIfImageIsInDatabase(ContentResolver resolver, String COLUMN_NAME, String param1) {
         Cursor cursor = resolver.query(ImageContract.ImageEntry.CONTENT_URI, new String[]{COLUMN_NAME}, COLUMN_NAME + " = ?", new String[]{param1}, null);
@@ -106,8 +106,10 @@ public class Utility {
         String imageURL = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL));
         String downloaURL = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_DLDURL));
         String imageId = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_NAME));
-
-        return new DataModel(imageURL, downloaURL, imageId);
+        String username = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_USERNAME));
+        String portfoliourl = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_PORTFOLIOURL));
+        String profile_image = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_PROFILEIMAGE));
+        return new DataModel(imageURL, downloaURL, imageId, username, portfoliourl, profile_image);
     }
 
     public static boolean detectConnection(Context context) {

@@ -26,7 +26,7 @@ public class ImageDBHelper extends SQLiteOpenHelper {
     private void addImage(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + ImageContract.ImageEntry.TABLE_NAME + " ("
                 + ImageContract.ImageEntry._ID + " integer PRIMARY KEY," + ImageContract.ImageEntry.COLUMN_NAME + " text NOT NULL UNIQUE,"
-                + ImageContract.ImageEntry.COLUMN_REGURL + " text NOT NULL," + ImageContract.ImageEntry.COLUMN_DLDURL + " text NOT NULL);");
+                + ImageContract.ImageEntry.COLUMN_REGURL + " text NOT NULL," + ImageContract.ImageEntry.COLUMN_USERNAME + " text NOT NULL," + ImageContract.ImageEntry.COLUMN_PORTFOLIOURL + " text NOT NULL," + ImageContract.ImageEntry.COLUMN_PROFILEIMAGE + " text NOT NULL," + ImageContract.ImageEntry.COLUMN_DLDURL + " text NOT NULL);");
 
     }
 

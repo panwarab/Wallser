@@ -65,11 +65,16 @@ public class FetchImageVolley {
                     try {
                         JSONObject object = array.getJSONObject(i);
                         String id = object.getString("id");
+                        JSONObject user = object.getJSONObject("user");
+                        String user_name = user.getString("name");
+                        String portfolio_url = user.getString("portfolio_url");
+                        JSONObject profile = user.getJSONObject("profile_image");
+                        String profile_image = profile.getString("large");
                         JSONObject object1 = object.getJSONObject("urls");
                         String imageURL = object1.getString("regular");
                         JSONObject object2 = object.getJSONObject("links");
                         String downloadURL = object2.getString("download");
-                        model.add(new DataModel(imageURL, downloadURL, id));
+                        model.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_url, profile_image));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -118,13 +123,17 @@ public class FetchImageVolley {
                     ArrayList<DataModel> queryModel = new ArrayList<>();
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = array.getJSONObject(i);
-                        String name = object.getString("id");
+                        String id = object.getString("id");
+                        JSONObject user = object.getJSONObject("user");
+                        String user_name = user.getString("name");
+                        String portfolio_url = user.getString("portfolio_url");
+                        JSONObject profile = user.getJSONObject("profile_image");
+                        String profile_image = profile.getString("medium");
                         JSONObject object1 = object.getJSONObject("urls");
                         String imageURL = object1.getString("regular");
                         JSONObject object2 = object.getJSONObject("links");
                         String downloadURL = object2.getString("download");
-                        DataModel dataModel = new DataModel(imageURL, downloadURL, name);
-                        queryModel.add(dataModel);
+                        queryModel.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_url, profile_image));
                     }
                     if (queryModel.size() != 0) {
                         OnResultFetchedCallback fetchedCallback = (OnResultFetchedCallback) context;

@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -22,6 +24,7 @@ import com.squareup.picasso.Target;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.asynctasks.AddDataTask;
 import thenextvoyager.wallser.asynctasks.DeleteDataTask;
@@ -103,6 +106,14 @@ public class ImageFragment extends Fragment {
         else
             favoriteb.setImageResource(R.drawable.ic_favorite_border);
         wallpaperb = (ImageView) rootView.findViewById(R.id.wallpaper_button);
+        TextView name = (TextView) rootView.findViewById(R.id.name);
+        name.setText(object.user_name);
+        name.setClickable(true);
+        final String portfolio_url = object.portfolio_url;
+        name.setMovementMethod(LinkMovementMethod.getInstance());
+        CircleImageView profile_image = (CircleImageView) rootView.findViewById(R.id.circle_photo);
+        profile_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Picasso.with(getContext()).load(object.profile_image).error(R.drawable.placeholder).resize(480, 480).into(profile_image);
         Log.d(TAG, sheetBehavior.toString());
         material_fab.setOnClickListener(new View.OnClickListener() {
             @Override
