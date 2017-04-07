@@ -26,4 +26,11 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?android:actionBarSize">
+
+        <include layout="@layout/progress_dialog" />
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

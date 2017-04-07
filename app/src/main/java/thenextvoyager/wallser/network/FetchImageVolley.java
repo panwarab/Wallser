@@ -1,7 +1,5 @@
 package thenextvoyager.wallser.network;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,7 +33,6 @@ public class FetchImageVolley {
 
     private static String TAG = FetchImageVolley.class.getSimpleName();
     Context context;
-    Dialog dialog;
     OnResultFetchedCallback fetchedCallback;
     RequestQueue requestQueue;
 
@@ -49,12 +46,9 @@ public class FetchImageVolley {
      * @param per_page                 By Default, set to 10.
      * @param page                     Current page number of querying API
      * @param order_by                 Two options, latest or popular
-     * @param shouldShowProgressDialog Don't show loading if it is not the first request
+     * @param progressBar Don't show loading if it is not the first request
      */
-    public void loadDataUsingVolley(int per_page, int page, String order_by, boolean shouldShowProgressDialog) {
-        if (shouldShowProgressDialog) {
-            dialog = ProgressDialog.show(context, "Wallser", "Loading");
-        }
+    public void loadDataUsingVolley(int per_page, int page, String order_by) {
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
@@ -79,10 +73,6 @@ public class FetchImageVolley {
                         e.printStackTrace();
                     }
                 }
-
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
                 if (model != null)
                     fetchedCallback.getData(model);
 
@@ -91,7 +81,6 @@ public class FetchImageVolley {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (dialog != null) dialog.dismiss();
                 if (context != null)
                     Toast.makeText(context, R.string.connissue, Toast.LENGTH_SHORT).show();
             }
@@ -108,7 +97,6 @@ public class FetchImageVolley {
     }
 
     public void destroyRelyingObjects() {
-        if (dialog != null) dialog.cancel();
         fetchedCallback = null;
         context = null;
     }

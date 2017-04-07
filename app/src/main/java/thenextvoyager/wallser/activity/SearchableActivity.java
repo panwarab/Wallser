@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
 
 
     private static final String TAG = SearchableActivity.class.getSimpleName();
+    ProgressBar progressBar;
     private int page;
     private String query;
     private FetchImageVolley imageVolley;
@@ -38,6 +41,7 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        progressBar = (ProgressBar) findViewById(R.id.progress_dialog);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             query = intent.getStringExtra(SearchManager.QUERY);
@@ -47,6 +51,9 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
             imageVolley = new FetchImageVolley(SearchableActivity.this);
             page = 1;
             imageVolley.loadDataForQuery(Constants.PER_PAGE, page, query);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
         }
         model = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.grid_recycler);
@@ -58,6 +65,9 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
                 if (imageVolley != null) {
                     SearchableActivity.this.page = page;
                     imageVolley.loadDataForQuery(Constants.PER_PAGE, SearchableActivity.this.page, query);
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
@@ -76,5 +86,8 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
     public void getData(ArrayList<DataModel> model) {
         Log.d(TAG, "Searchable Activity getData called for page number = " + page);
         imageAdapter.addNewData(model);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
     }
 }

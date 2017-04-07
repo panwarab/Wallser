@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nav_message"
-            android:textColor="@color/fade_taxt_color"
+            android:textColor="@color/fade_text_color"
             android:textSize="10sp" />
 
 

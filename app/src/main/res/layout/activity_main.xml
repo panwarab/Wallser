@@ -31,9 +31,9 @@
                 android:id="@+id/sliding_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                ads:tabTextColor="@color/fade_text_color"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/solid_text_color"
-                app:tabTextColor="@color/fade_taxt_color" />
+                app:tabSelectedTextColor="@color/solid_text_color" />
 
         </android.support.design.widget.AppBarLayout>
 

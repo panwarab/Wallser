@@ -7,13 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -47,6 +47,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
     public static String order_By;
     FetchImageVolley imageVolley;
     Context context;
+    ProgressBar progressBar;
     /**
      * Unsplash API call parameter, By Default=latest
      * Change it in Pager Fragment, based on Tab tapped
@@ -85,7 +86,6 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
 
 
     public static PageFragment newInstance(String TAG) {
-        Log.d(TAG, "PAGE FRAGMENT CREATED, HERE YOU CAN DECIDE THE DEBUGGING DESTINY");
         PageFragment pageFragment = new PageFragment();
         TagToFrag.put(TAG, pageFragment);
         return pageFragment;
@@ -136,8 +136,9 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
 
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 page_no=page;
-                Toast.makeText(getContext(), "Page number " + page_no, Toast.LENGTH_SHORT).show();
-                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, (page_no==1)?true:false);
+                imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
+                if (progressBar != null)
+                    progressBar.setVisibility(View.VISIBLE);
             }
         };
         if (savedInstanceState != null) {
@@ -149,7 +150,9 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
             model = new ArrayList<>();
             order_By = "latest";
             page_no = 1;
-            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, (page_no==1)?true:false);
+            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
         }
         imageAdapter = new ImageAdapter(getContext(), model);
     }
@@ -181,7 +184,9 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
                 order_By = "latest";
             page_no = 1;
             model.clear();
-            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, (page_no==1)?true:false);
+            imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -193,6 +198,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
 
         this.savedInstanceState = savedInstanceState;
         View view = inflater.inflate(R.layout.fragment_page, container, false);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_dialog);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         no_internet_container = (FrameLayout) view.findViewById(R.id.no_internet_container);
@@ -225,7 +231,9 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
         imageVolley.cancelRequest(order_By);
         order_By = order_by;
         page_no = 1;
-        imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By, true);
+        imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
+        if (progressBar != null)
+            progressBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -233,7 +241,10 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
         if (imageAdapter != null) {
             imageAdapter.addNewData(incomingmodel);
         } else {
-            Toast.makeText(context, "Image Adapter is Null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.loading_in_a_bit, Toast.LENGTH_SHORT).show();
+        }
+        if (progressBar != null) {
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 

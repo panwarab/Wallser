@@ -39,4 +39,5 @@
     <string name="latest_checkable">Loading latest walls! :)</string>
     <string name="popular_checked">These are the popular walls! :)</string>
     <string name="popular_checkable">Loading popular walls! :)</string>
+    <string name="loading_in_a_bit">loading in a bit</string>
 </resources>
