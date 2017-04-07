@@ -1,7 +1,6 @@
 package thenextvoyager.wallser.network;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,7 +30,6 @@ import static thenextvoyager.wallser.fragment.PageFragment.order_By;
 
 public class FetchImageVolley {
 
-    private static String TAG = FetchImageVolley.class.getSimpleName();
     Context context;
     OnResultFetchedCallback fetchedCallback;
     RequestQueue requestQueue;
@@ -46,7 +44,6 @@ public class FetchImageVolley {
      * @param per_page                 By Default, set to 10.
      * @param page                     Current page number of querying API
      * @param order_by                 Two options, latest or popular
-     * @param progressBar Don't show loading if it is not the first request
      */
     public void loadDataUsingVolley(int per_page, int page, String order_by) {
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
@@ -91,7 +88,6 @@ public class FetchImageVolley {
 
     public void cancelRequest(String TAG) {
         if (TAG != null && requestQueue != null) {
-            Log.d(FetchImageVolley.TAG, "Request Queue Destroyed");
             requestQueue.cancelAll(TAG);
         }
     }

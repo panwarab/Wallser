@@ -14,7 +14,6 @@
     import android.support.v7.app.AppCompatActivity;
     import android.support.v7.widget.SearchView;
     import android.support.v7.widget.Toolbar;
-    import android.util.Log;
     import android.view.Menu;
     import android.view.MenuInflater;
     import android.view.MenuItem;
@@ -40,7 +39,6 @@
 
     public class MainActivity extends AppCompatActivity implements OnResultFetchedCallback {
 
-        private static String TAG = MainActivity.class.getSimpleName();
 
         AdView adView;
 
@@ -164,7 +162,6 @@
 
         @Override
         public void getData(ArrayList<DataModel> model) {
-            Log.d(TAG, "OnResultFetchedCallback Called with data size" + model.size());
             PageFragment pagefragment = (PageFragment) TagToFrag.get(PAGEFRAG);
             if (pagefragment != null) {
                 pagefragment.addNewData(model);

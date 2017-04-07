@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -24,8 +23,6 @@ import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
 public class SearchableActivity extends AppCompatActivity implements OnResultFetchedCallback {
 
-
-    private static final String TAG = SearchableActivity.class.getSimpleName();
     ProgressBar progressBar;
     private int page;
     private String query;
@@ -84,7 +81,6 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
 
     @Override
     public void getData(ArrayList<DataModel> model) {
-        Log.d(TAG, "Searchable Activity getData called for page number = " + page);
         imageAdapter.addNewData(model);
         if (progressBar != null) {
             progressBar.setVisibility(View.INVISIBLE);

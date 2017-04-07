@@ -2,7 +2,6 @@ package thenextvoyager.wallser.data;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import java.util.HashMap;
 
@@ -33,7 +32,6 @@ public class Constants {
     Context context;
 
     public Constants(Context context) {
-        Log.d(TAG, "CONSTANTS OBJECT CREATED");
         this.context = context;
         api_key = context.getResources().getString(R.string.unsplash_api_key);
         TagToFrag = new HashMap<>();

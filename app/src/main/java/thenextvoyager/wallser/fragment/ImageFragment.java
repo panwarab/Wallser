@@ -11,7 +11,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +114,6 @@ public class ImageFragment extends Fragment {
         CircleImageView profile_image = (CircleImageView) rootView.findViewById(R.id.circle_photo);
         profile_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.with(getContext()).load(object.profile_image).error(R.drawable.placeholder).resize(480, 480).into(profile_image);
-        Log.d(TAG, sheetBehavior.toString());
         material_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +149,6 @@ public class ImageFragment extends Fragment {
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                Log.d("Image Logs", "onBitmapLoaded");
                 if (Build.VERSION.SDK_INT >= 21)
                     getActivity().startPostponedEnterTransition();
                 else
@@ -214,13 +211,11 @@ public class ImageFragment extends Fragment {
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                Log.d("Image Logs", "onBitmapFailed");
                 imageView.setImageDrawable(errorDrawable);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.d("Image Logs", "onPrepareLoad");
                 imageView.setImageDrawable(placeHolderDrawable);
             }
         };
