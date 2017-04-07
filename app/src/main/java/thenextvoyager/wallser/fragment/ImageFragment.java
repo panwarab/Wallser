@@ -5,6 +5,7 @@ import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -151,6 +152,10 @@ public class ImageFragment extends Fragment {
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 Log.d("Image Logs", "onBitmapLoaded");
+                if (Build.VERSION.SDK_INT >= 21)
+                    getActivity().startPostponedEnterTransition();
+                else
+                    getActivity().supportStartPostponedEnterTransition();
                 if (imageView != null)
                 imageView.setImageBitmap(bitmap);
                 favoriteb.setOnClickListener(new View.OnClickListener() {

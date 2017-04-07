@@ -1,6 +1,7 @@
 package thenextvoyager.wallser.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -25,6 +26,11 @@ public class ImageActivity extends AppCompatActivity {
 
         ImageFragment fragment = ImageFragment.newInstance(object);
         getSupportFragmentManager().beginTransaction().add(R.id.image_frag_container, fragment, IMAGE_FRAGMENT_TAG).commit();
+        if (Build.VERSION.SDK_INT >= 21) {
+            postponeEnterTransition();
+        } else {
+            supportPostponeEnterTransition();
+        }
     }
 
 
