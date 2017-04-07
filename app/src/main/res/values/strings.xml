@@ -8,8 +8,8 @@
     <string name="no_internet_message">Please connect to internet and try again!</string>
     <string name="transition_name">shared_image</string>
     <string name="image_content_desc">tapped an image</string>
-    <string name="latest">latest</string>
-    <string name="popular">popular</string>
+    <string name="latest">Latest</string>
+    <string name="popular">Popular</string>
     <string name="close_button">close the image</string>
     <string name="share_button">share the image</string>
     <string name="download_button">download the image</string>
@@ -35,4 +35,8 @@
     <string name="text_hint">Voyager</string>
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="UnsplashUrl">unsplash.com</string>
+    <string name="latest_checked">These are the latest walls! :)</string>
+    <string name="latest_checkable">Loading latest walls! :)</string>
+    <string name="popular_checked">These are the popular walls! :)</string>
+    <string name="popular_checkable">Loading popular walls! :)</string>
 </resources>

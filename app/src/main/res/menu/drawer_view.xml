@@ -2,6 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
+        android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/latest"
+            android:checkable="true"
+            android:icon="@drawable/ic_fiber_new"
+            android:title="@string/latest" />
+        <item
+            android:id="@+id/popular"
+            android:checkable="true"
+            android:icon="@drawable/ic_donut_small"
+            android:title="@string/popular" />
+    </group>
+    <group
         android:id="@+id/group1"
         android:checkableBehavior="single">
         <item

@@ -30,6 +30,7 @@
     import thenextvoyager.wallser.R;
     import thenextvoyager.wallser.adapter.SimpleFragmentPagerAdapter;
     import thenextvoyager.wallser.callback.OnResultFetchedCallback;
+    import thenextvoyager.wallser.callback.OrderByChangeCallback;
     import thenextvoyager.wallser.data.Constants;
     import thenextvoyager.wallser.data.DataModel;
     import thenextvoyager.wallser.fragment.PageFragment;
@@ -131,6 +132,25 @@
                     emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Text goes here");
                     startActivity(Intent.createChooser(emailIntent, "Send mail..."));
                     break;
+                case R.id.latest:
+                    MenuItem item1 = navigationView.getMenu().getItem(0);
+                    if (item1.isChecked()) {
+                        Toast.makeText(MainActivity.this, R.string.latest_checked, Toast.LENGTH_SHORT).show();
+                    } else {
+                        OrderByChangeCallback changeCallback = (OrderByChangeCallback) TagToFrag.get(PAGEFRAG);
+                        changeCallback.onDialogFinish("latest");
+                        Toast.makeText(MainActivity.this, R.string.latest_checkable, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case R.id.popular:
+                    MenuItem item2 = navigationView.getMenu().getItem(1);
+                    if (item2.isChecked()) {
+                        Toast.makeText(MainActivity.this, R.string.popular_checked, Toast.LENGTH_SHORT).show();
+                    } else {
+                        OrderByChangeCallback changeCallback = (OrderByChangeCallback) TagToFrag.get(PAGEFRAG);
+                        changeCallback.onDialogFinish("popular");
+                        Toast.makeText(MainActivity.this, R.string.popular_checkable, Toast.LENGTH_SHORT).show();
+                    }
             }
             drawerLayout.closeDrawers();
 
@@ -146,8 +166,18 @@
         public void getData(ArrayList<DataModel> model) {
             Log.d(TAG, "OnResultFetchedCallback Called with data size" + model.size());
             PageFragment pagefragment = (PageFragment) TagToFrag.get(PAGEFRAG);
-            if (pagefragment != null)
+            if (pagefragment != null) {
                 pagefragment.addNewData(model);
+                switch (pagefragment.order_By) {
+                    case "latest":
+                        navigationView.getMenu().getItem(0).setChecked(true);
+                        break;
+                    case "popular":
+                        navigationView.getMenu().getItem(1).setChecked(true);
+                        break;
+                }
+            }
+
             else
                 Toast.makeText(MainActivity.this, TagToFrag.get(PAGEFRAG).toString(), Toast.LENGTH_SHORT).show();
         }

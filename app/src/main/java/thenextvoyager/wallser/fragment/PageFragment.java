@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
-import thenextvoyager.wallser.callback.SortDialogCallback;
+import thenextvoyager.wallser.callback.OrderByChangeCallback;
 import thenextvoyager.wallser.data.Constants;
 import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.network.FetchImageVolley;
@@ -31,7 +30,6 @@ import static thenextvoyager.wallser.data.Constants.CHOICE_TAG;
 import static thenextvoyager.wallser.data.Constants.DATA_TAG;
 import static thenextvoyager.wallser.data.Constants.HANDLER_DELAY_TIME;
 import static thenextvoyager.wallser.data.Constants.PAGE_NO;
-import static thenextvoyager.wallser.data.Constants.PER_PAGE;
 import static thenextvoyager.wallser.data.Constants.TagToFrag;
 import static thenextvoyager.wallser.utility.Utility.detectConnection;
 
@@ -40,7 +38,7 @@ import static thenextvoyager.wallser.utility.Utility.detectConnection;
  * Created by Abhiroj on 3/3/2017.
  */
 
-public class PageFragment extends Fragment implements SortDialogCallback {
+public class PageFragment extends Fragment implements OrderByChangeCallback {
 
     private static final String TAG = PageFragment.class.getSimpleName();
     /**
@@ -156,21 +154,9 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         imageAdapter = new ImageAdapter(getContext(), model);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort:
-                SortDialog sortDialog = new SortDialog();
-                sortDialog.setTargetFragment(PageFragment.this, 911);
-                sortDialog.show(getChildFragmentManager(), "sortfragment");
-                break;
-        }
-        return true;
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_page_fragment, menu);
     }
 
 
@@ -185,14 +171,12 @@ public class PageFragment extends Fragment implements SortDialogCallback {
     private void swapViews() {
         if (detectConnection(getContext()) == false) {
             recyclerView.setVisibility(View.INVISIBLE);
-            setHasOptionsMenu(false);
             no_internet_container.setVisibility(View.VISIBLE);
         } else {
             shouldHandlerRunAgain = false;
             handler.removeCallbacks(job, null);
             handler = null;
             recyclerView.setVisibility(View.VISIBLE);
-            setHasOptionsMenu(true);
             no_internet_container.setVisibility(View.INVISIBLE);
                 order_By = "latest";
             page_no = 1;
@@ -216,7 +200,6 @@ public class PageFragment extends Fragment implements SortDialogCallback {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(scrollListener);
         if (isConnected) {
-            setHasOptionsMenu(true);
             recyclerView.setVisibility(View.VISIBLE);
             no_internet_container.setVisibility(View.INVISIBLE);
         } else {
