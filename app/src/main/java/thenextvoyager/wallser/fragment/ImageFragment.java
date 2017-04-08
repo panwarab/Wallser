@@ -122,7 +122,10 @@ public class ImageFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.material_fab:
+                        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
                         sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        else
+                            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         break;
                 }
             }

@@ -38,28 +38,12 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end|right"
-        android:layout_margin="16dp"
-        app:layout_anchorGravity="bottom|end|right">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/material_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_navigation"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabSize="auto" />
-    </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:elevation="100dp"
         android:fillViewport="true"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
@@ -82,8 +66,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circle_photo"
                     android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/sample" />
+                    android:layout_height="56dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -163,6 +146,18 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/material_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_navigation"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="auto"
+        app:layout_anchor="@+id/scroll_view"
+        app:layout_anchorGravity="top|end" />
 
 
 </android.support.design.widget.CoordinatorLayout>

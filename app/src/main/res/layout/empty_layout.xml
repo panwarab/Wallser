@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/empty_view_message"
-            android:textColor="@color/empty_view_text_color" />
+            android:textColor="@color/solid_text_color" />
     </LinearLayout>
 
 </FrameLayout>
