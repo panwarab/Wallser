@@ -64,6 +64,20 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
     boolean shouldHandlerRunAgain = true;
     private boolean isConnected = detectConnection(getContext());
     private ArrayList<DataModel> model;
+    private Handler forProgressRunnable = makeHandler();
+    private boolean loading;
+    Runnable forProgress = new Runnable() {
+        @Override
+        public void run() {
+            if (progressBar != null) {
+                if (loading)
+                    progressBar.setVisibility(View.VISIBLE);
+                else
+                    progressBar.setVisibility(View.INVISIBLE);
+            }
+            forProgressRunnable.postDelayed(forProgress, HANDLER_DELAY_TIME);
+        }
+    };
     /**
      * Handler is attached to the Main Thread and it's message queue, because it is the one who created it.
      * <p>
@@ -83,7 +97,6 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
                 handler.postDelayed(job, HANDLER_DELAY_TIME);
         }
     };
-
 
     public static PageFragment newInstance(String TAG) {
         PageFragment pageFragment = new PageFragment();
@@ -137,8 +150,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 page_no=page;
                 imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
-                if (progressBar != null)
-                    progressBar.setVisibility(View.VISIBLE);
+                loading = true;
             }
         };
         if (savedInstanceState != null) {
@@ -151,8 +163,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
             order_By = "latest";
             page_no = 1;
             imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
-            if (progressBar != null)
-                progressBar.setVisibility(View.VISIBLE);
+            loading = true;
         }
         imageAdapter = new ImageAdapter(getContext(), model);
     }
@@ -174,6 +185,10 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
     private void swapViews() {
         if (detectConnection(getContext()) == false) {
             recyclerView.setVisibility(View.INVISIBLE);
+            if (forProgressRunnable != null)
+                forProgressRunnable.removeCallbacks(forProgress, null);
+            loading = false;
+            forProgressRunnable = null;
             no_internet_container.setVisibility(View.VISIBLE);
         } else {
             shouldHandlerRunAgain = false;
@@ -185,8 +200,9 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
             page_no = 1;
             model.clear();
             imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
-            if (progressBar != null)
-                progressBar.setVisibility(View.VISIBLE);
+            if (forProgressRunnable == null) forProgressRunnable = makeHandler();
+            forProgressRunnable.post(forProgress);
+            loading = true;
         }
     }
 
@@ -208,6 +224,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
         if (isConnected) {
             recyclerView.setVisibility(View.VISIBLE);
             no_internet_container.setVisibility(View.INVISIBLE);
+            forProgressRunnable.post(forProgress);
         } else {
             recyclerView.setVisibility(View.INVISIBLE);
             no_internet_container.setVisibility(View.VISIBLE);
@@ -232,8 +249,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
         order_By = order_by;
         page_no = 1;
         imageVolley.loadDataUsingVolley(Constants.PER_PAGE, page_no, order_By);
-        if (progressBar != null)
-            progressBar.setVisibility(View.VISIBLE);
+        loading = true;
     }
 
 
@@ -243,9 +259,7 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
         } else {
             Toast.makeText(context, R.string.loading_in_a_bit, Toast.LENGTH_SHORT).show();
         }
-        if (progressBar != null) {
-            progressBar.setVisibility(View.INVISIBLE);
-        }
+        loading = false;
     }
 
 }
