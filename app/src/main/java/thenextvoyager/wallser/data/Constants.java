@@ -29,12 +29,17 @@ public class Constants {
     private static final String TAG = Constants.class.getSimpleName();
     public static String api_key;
     public static HashMap<String, Fragment> TagToFrag;
+    private static String unsplashUrl = "https://unsplash.com/@";
     Context context;
 
     public Constants(Context context) {
         this.context = context;
         api_key = context.getResources().getString(R.string.unsplash_api_key);
         TagToFrag = new HashMap<>();
+    }
+
+    public static String makeUserURL(String username) {
+        return new StringBuffer(unsplashUrl).append(username).toString();
     }
 
 }

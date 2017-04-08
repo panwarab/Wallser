@@ -12,7 +12,7 @@ public class DataModel implements Serializable {
     public String downloadURL;
     public String name;
     public String user_name;
-    public String portfolio_url;
+    public String portfolio_name;
     public String profile_image;
 
     public DataModel(String imageURL, String downloadURL, String id, String user_name, String portfolio_url, String profile_image) {
@@ -20,7 +20,7 @@ public class DataModel implements Serializable {
         this.downloadURL = downloadURL;
         name = id;
         this.user_name = user_name;
-        this.portfolio_url = portfolio_url;
+        this.portfolio_name = portfolio_url;
         this.profile_image = profile_image;
     }
 }

@@ -33,6 +33,7 @@ import thenextvoyager.wallser.data.ImageContract;
 import thenextvoyager.wallser.utility.Utility;
 
 import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
+import static thenextvoyager.wallser.data.Constants.makeUserURL;
 
 
 /**
@@ -108,9 +109,11 @@ public class ImageFragment extends Fragment {
         wallpaperb = (ImageView) rootView.findViewById(R.id.wallpaper_button);
         TextView name = (TextView) rootView.findViewById(R.id.name);
         name.setText(object.user_name);
-        name.setClickable(true);
-        final String portfolio_url = object.portfolio_url;
-        name.setMovementMethod(LinkMovementMethod.getInstance());
+        final String portfolio_url = makeUserURL(object.portfolio_name);
+        TextView url = (TextView) rootView.findViewById(R.id.url);
+        url.setClickable(true);
+        url.setMovementMethod(LinkMovementMethod.getInstance());
+        url.setText(portfolio_url);
         CircleImageView profile_image = (CircleImageView) rootView.findViewById(R.id.circle_photo);
         profile_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.with(getContext()).load(object.profile_image).error(R.drawable.placeholder).resize(480, 480).into(profile_image);

@@ -1,6 +1,7 @@
 package thenextvoyager.wallser.network;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -47,6 +48,7 @@ public class FetchImageVolley {
      */
     public void loadDataUsingVolley(int per_page, int page, String order_by) {
         String URL = "https://api.unsplash.com/photos/?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&order_by=" + order_by;
+        Log.d("FetchImageVOlley", URL);
         JsonArrayRequest objectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray array) {
@@ -58,14 +60,14 @@ public class FetchImageVolley {
                         String id = object.getString("id");
                         JSONObject user = object.getJSONObject("user");
                         String user_name = user.getString("name");
-                        String portfolio_url = user.getString("portfolio_url");
+                        String portfolio_name = user.getString("username");
                         JSONObject profile = user.getJSONObject("profile_image");
                         String profile_image = profile.getString("large");
                         JSONObject object1 = object.getJSONObject("urls");
                         String imageURL = object1.getString("regular");
                         JSONObject object2 = object.getJSONObject("links");
                         String downloadURL = object2.getString("download");
-                        model.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_url, profile_image));
+                        model.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_name, profile_image));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -110,14 +112,14 @@ public class FetchImageVolley {
                         String id = object.getString("id");
                         JSONObject user = object.getJSONObject("user");
                         String user_name = user.getString("name");
-                        String portfolio_url = user.getString("portfolio_url");
+                        String portfolio_name = user.getString("username");
                         JSONObject profile = user.getJSONObject("profile_image");
                         String profile_image = profile.getString("medium");
                         JSONObject object1 = object.getJSONObject("urls");
                         String imageURL = object1.getString("regular");
                         JSONObject object2 = object.getJSONObject("links");
                         String downloadURL = object2.getString("download");
-                        queryModel.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_url, profile_image));
+                        queryModel.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_name, profile_image));
                     }
                     if (queryModel.size() != 0) {
                         OnResultFetchedCallback fetchedCallback = (OnResultFetchedCallback) context;

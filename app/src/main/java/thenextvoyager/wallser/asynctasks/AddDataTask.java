@@ -43,7 +43,7 @@ public class AddDataTask extends AsyncTask<DataModel, Void, Boolean> {
             contentValues.put(ImageContract.ImageEntry.COLUMN_REGURL, object.imageURL);
             contentValues.put(ImageContract.ImageEntry.COLUMN_DLDURL, object.downloadURL);
             contentValues.put(ImageContract.ImageEntry.COLUMN_USERNAME, object.user_name);
-            contentValues.put(ImageContract.ImageEntry.COLUMN_PORTFOLIOURL, object.portfolio_url);
+            contentValues.put(ImageContract.ImageEntry.COLUMN_PORTFOLIONAME, object.portfolio_name);
             contentValues.put(ImageContract.ImageEntry.COLUMN_PROFILEIMAGE, object.profile_image);
             resolver.insert(ImageContract.ImageEntry.CONTENT_URI, contentValues);
             return true;

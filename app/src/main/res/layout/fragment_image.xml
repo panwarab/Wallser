@@ -104,8 +104,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="@string/UnsplashUrl"
+                        android:autoLink="web"
                         android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColorLink="@color/solid_text_color"
                         android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>

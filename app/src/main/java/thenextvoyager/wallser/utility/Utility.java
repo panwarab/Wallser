@@ -107,7 +107,7 @@ public class Utility {
         String downloaURL = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_DLDURL));
         String imageId = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_NAME));
         String username = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_USERNAME));
-        String portfoliourl = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_PORTFOLIOURL));
+        String portfoliourl = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_PORTFOLIONAME));
         String profile_image = cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_PROFILEIMAGE));
         return new DataModel(imageURL, downloaURL, imageId, username, portfoliourl, profile_image);
     }
