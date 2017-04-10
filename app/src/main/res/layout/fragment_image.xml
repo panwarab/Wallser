@@ -53,6 +53,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/first_horizontal_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -148,7 +149,7 @@
     </android.support.v4.widget.NestedScrollView>
 
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/material_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -157,7 +158,7 @@
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="auto"
         app:layout_anchor="@+id/scroll_view"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="top|end" />-->
 
 
 </android.support.design.widget.CoordinatorLayout>

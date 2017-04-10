@@ -66,6 +66,9 @@ public class PageFragment extends Fragment implements OrderByChangeCallback {
     private ArrayList<DataModel> model;
     private Handler forProgressRunnable = makeHandler();
     private boolean loading;
+    /**
+     * Runnable passed to message queue to check wether wether the loading is occuring or not, it is checked with a delay of one second.
+     */
     Runnable forProgress = new Runnable() {
         @Override
         public void run() {

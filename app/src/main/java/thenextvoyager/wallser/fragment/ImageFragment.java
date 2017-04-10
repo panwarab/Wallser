@@ -8,13 +8,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,10 +97,20 @@ public class ImageFragment extends Fragment {
         );
 
         final ImageView share_button = (ImageView) rootView.findViewById(R.id.share_button);
-        FloatingActionButton material_fab = (FloatingActionButton) rootView.findViewById(R.id.material_fab);
+        /*FloatingActionButton material_fab = (FloatingActionButton) rootView.findViewById(R.id.material_fab);
+        */
         View scrollView = rootView.findViewById(R.id.scroll_view);
+
         final BottomSheetBehavior sheetBehavior = BottomSheetBehavior.from(scrollView);
-        sheetBehavior.setPeekHeight(0);
+        final LinearLayout id_layout = (LinearLayout) rootView.findViewById(R.id.first_horizontal_layout);
+        ViewTreeObserver viewTreeObserver = id_layout.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                id_layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                sheetBehavior.setPeekHeight(id_layout.getHeight());
+            }
+        });
         downloadb = (ImageView) rootView.findViewById(R.id.download_button);
         favoriteb = (ImageView) rootView.findViewById(R.id.favorite_button);
         if (isImageInDatabase)
@@ -117,7 +128,7 @@ public class ImageFragment extends Fragment {
         CircleImageView profile_image = (CircleImageView) rootView.findViewById(R.id.circle_photo);
         profile_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.with(getContext()).load(object.profile_image).error(R.drawable.placeholder).resize(480, 480).into(profile_image);
-        material_fab.setOnClickListener(new View.OnClickListener() {
+      /*  material_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -129,7 +140,7 @@ public class ImageFragment extends Fragment {
                         break;
                 }
             }
-        });
+        });*/
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
