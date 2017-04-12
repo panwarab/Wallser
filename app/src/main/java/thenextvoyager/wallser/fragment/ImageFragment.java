@@ -3,13 +3,15 @@ package thenextvoyager.wallser.fragment;
 
 import android.app.WallpaperManager;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,12 +121,18 @@ public class ImageFragment extends Fragment {
             favoriteb.setImageResource(R.drawable.ic_favorite_border);
         wallpaperb = (ImageView) rootView.findViewById(R.id.wallpaper_button);
         TextView name = (TextView) rootView.findViewById(R.id.name);
-        name.setText(object.user_name);
+        name.setPaintFlags(name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        name.setText(new StringBuffer().append("@").append(object.user_name).toString());
         final String portfolio_url = makeUserURL(object.portfolio_name);
-        TextView url = (TextView) rootView.findViewById(R.id.url);
-        url.setClickable(true);
-        url.setMovementMethod(LinkMovementMethod.getInstance());
-        url.setText(portfolio_url);
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(portfolio_url));
+                getActivity().startActivity(i);
+            }
+        });
+
         CircleImageView profile_image = (CircleImageView) rootView.findViewById(R.id.circle_photo);
         profile_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.with(getContext()).load(object.profile_image).error(R.drawable.placeholder).resize(480, 480).into(profile_image);

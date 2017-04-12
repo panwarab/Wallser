@@ -9,6 +9,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.SpannableStringBuilder;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import thenextvoyager.wallser.data.ImageContract;
 
 public class Utility {
 
+    public static final int MAX_LINK_LENGTH = 20;
     private static File walserDirectory;
 
     /**
@@ -118,6 +122,31 @@ public class Utility {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
+
+    public static CharSequence shortenLinks(String text) {
+        return shortenLinks(text, Linkify.ALL);
+    }
+
+    public static CharSequence shortenLinks(String text, int linkMask) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(text);
+        Linkify.addLinks(builder, linkMask);
+        URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
+        for (URLSpan span : spans) {
+            int start = builder.getSpanStart(span);
+            int end = builder.getSpanEnd(span);
+            int flags = builder.getSpanFlags(span);
+
+            CharSequence linkText = builder.subSequence(start, end);
+            if (linkText.length() > MAX_LINK_LENGTH) {
+                linkText = linkText.subSequence(0, 20) + "…";
+                builder.replace(start, end, linkText);
+                builder.removeSpan(span);
+                builder.setSpan(span, start, start + linkText.length(), flags);
+            }
+        }
+        return builder;
+    }
+
 
 
 }

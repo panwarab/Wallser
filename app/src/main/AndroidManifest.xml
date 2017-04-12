@@ -43,7 +43,7 @@
             android:name=".activity.displayImage"
             android:label="@string/title_activity_display_image"
             android:parentActivityName=".activity.DownloadsActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/ImageTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="thenextvoyager.wallser.activity.DownloadsActivity" />

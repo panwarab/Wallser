@@ -39,7 +39,8 @@ public class Constants {
     }
 
     public static String makeUserURL(String username) {
-        return new StringBuffer(unsplashUrl).append(username).toString();
+        String utm = "?utm_source=" + "Wallser" + "&utm_medium=referral&utm_campaign=api-credit";
+        return new StringBuffer(unsplashUrl).append(username).append(utm).toString();
     }
 
 }
