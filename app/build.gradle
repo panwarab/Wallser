@@ -13,15 +13,20 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("store.jks")
-            storePassword "storingkeys"
-            keyAlias "releasetest"
-            keyPassword "keystored"
+            try {
+                storeFile file("wallserkeystore.jks")
+                storePassword KEYSTORE_PASSWORD
+                keyAlias "wallserkey"
+                keyPassword KEY_PASSWORD
+            }
+            catch (ex) {
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+            }
         }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
