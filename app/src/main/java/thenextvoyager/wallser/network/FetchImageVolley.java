@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import thenextvoyager.wallser.R;
+import thenextvoyager.wallser.callback.OnInvalidQueryCallback;
 import thenextvoyager.wallser.callback.OnResultFetchedCallback;
 import thenextvoyager.wallser.data.DataModel;
 
@@ -99,35 +100,41 @@ public class FetchImageVolley {
         context = null;
     }
 
-    public void loadDataForQuery(int per_page, int page, String query) {
+    public void loadDataForQuery(int per_page, int page, final String query) {
         String URL = "https://api.unsplash.com/search/photos?page=" + page + "&client_id=" + api_key + "&per_page=" + per_page + "&query=" + query;
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray array = response.getJSONArray("results");
-                    ArrayList<DataModel> queryModel = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.getJSONObject(i);
-                        String id = object.getString("id");
-                        JSONObject user = object.getJSONObject("user");
-                        String user_name = user.getString("name");
-                        String portfolio_name = user.getString("username");
-                        JSONObject profile = user.getJSONObject("profile_image");
-                        String profile_image = profile.getString("medium");
-                        JSONObject object1 = object.getJSONObject("urls");
-                        String imageURL = object1.getString("regular");
-                        JSONObject object2 = object.getJSONObject("links");
-                        String downloadURL = object2.getString("download");
-                        queryModel.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_name, profile_image));
-                    }
-                    if (queryModel.size() != 0) {
-                        OnResultFetchedCallback fetchedCallback = (OnResultFetchedCallback) context;
-                        fetchedCallback.getData(queryModel);
+                    int total = response.getInt("total");
+                    if (total > 0) {
+                        JSONArray array = response.getJSONArray("results");
+                        ArrayList<DataModel> queryModel = new ArrayList<>();
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject object = array.getJSONObject(i);
+                            String id = object.getString("id");
+                            JSONObject user = object.getJSONObject("user");
+                            String user_name = user.getString("name");
+                            String portfolio_name = user.getString("username");
+                            JSONObject profile = user.getJSONObject("profile_image");
+                            String profile_image = profile.getString("medium");
+                            JSONObject object1 = object.getJSONObject("urls");
+                            String imageURL = object1.getString("regular");
+                            JSONObject object2 = object.getJSONObject("links");
+                            String downloadURL = object2.getString("download");
+                            queryModel.add(new DataModel(imageURL, downloadURL, id, user_name, portfolio_name, profile_image));
+                        }
+                        if (queryModel.size() != 0) {
+                            OnResultFetchedCallback fetchedCallback = (OnResultFetchedCallback) context;
+                            fetchedCallback.getData(queryModel);
+                        }
+                    } else {
+                        OnInvalidQueryCallback queryCallback = (OnInvalidQueryCallback) context;
+                        queryCallback.onInvalidQueryDetected();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                    }
             }
         }, new Response.ErrorListener() {
             @Override

@@ -10,18 +10,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import thenextvoyager.wallser.R;
 import thenextvoyager.wallser.adapter.ImageAdapter;
+import thenextvoyager.wallser.callback.OnInvalidQueryCallback;
 import thenextvoyager.wallser.callback.OnResultFetchedCallback;
 import thenextvoyager.wallser.data.Constants;
 import thenextvoyager.wallser.data.DataModel;
 import thenextvoyager.wallser.network.FetchImageVolley;
 import thenextvoyager.wallser.utility.EndlessRecyclerViewScrollListener;
 
-public class SearchableActivity extends AppCompatActivity implements OnResultFetchedCallback {
+public class SearchableActivity extends AppCompatActivity implements OnResultFetchedCallback, OnInvalidQueryCallback {
 
     ProgressBar progressBar;
     private int page;
@@ -85,5 +87,14 @@ public class SearchableActivity extends AppCompatActivity implements OnResultFet
         if (progressBar != null) {
             progressBar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onInvalidQueryDetected() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        Toast.makeText(SearchableActivity.this, R.string.false_query, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
