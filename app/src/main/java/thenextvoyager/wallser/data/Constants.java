@@ -29,6 +29,7 @@ public class Constants {
     private static final String TAG = Constants.class.getSimpleName();
     public static String api_key;
     public static HashMap<String, Fragment> TagToFrag;
+    public static String githubURL = "https://github.com/AbhirojPanwar";
     private static String unsplashUrl = "https://unsplash.com/@";
     Context context;
 

@@ -8,5 +8,7 @@ Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="support_text">18dp</dimen>
+    <dimen name="heart_leftmargin">8dp</dimen>
     <item name="text_space" format="float" type="dimen">0.9</item>
 </resources>

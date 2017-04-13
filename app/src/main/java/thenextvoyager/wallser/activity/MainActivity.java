@@ -149,6 +149,9 @@
                         changeCallback.onDialogFinish("popular");
                         Toast.makeText(MainActivity.this, R.string.popular_checkable, Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case R.id.about:
+                    startActivity(new Intent(MainActivity.this, About.class));
             }
             drawerLayout.closeDrawers();
 

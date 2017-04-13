@@ -22,6 +22,10 @@
             android:id="@+id/feedback"
             android:icon="@drawable/ic_feedback"
             android:title="@string/share" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_developer_mode"
+            android:title="@string/about" />
     </group>
 
 </menu>

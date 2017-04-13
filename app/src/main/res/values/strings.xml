@@ -41,4 +41,7 @@
     <string name="popular_checkable">Loading popular walls! :)</string>
     <string name="loading_in_a_bit">loading in a bit</string>
     <string name="false_query">Can\'t commence search</string>
+    <string name="title_activity_about">About</string>
+    <string name="about">About</string>
+    <string name="dev_string">Made with</string>
 </resources>
