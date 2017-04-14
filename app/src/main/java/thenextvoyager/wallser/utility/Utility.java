@@ -33,7 +33,7 @@ public class Utility {
     private static File walserDirectory;
 
     /**
-     * Saves the image in disk or shares it via Intent; share variable defines the purpose.
+     * Saves the image in disk or shares it via Intent; share variable if true, shares the image running deleteAfterShareCode.
      *
      * @param bitmap
      * @param context

@@ -1,9 +1,11 @@
 package thenextvoyager.wallser.fragment;
 
 
+import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -11,7 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +40,7 @@ import thenextvoyager.wallser.data.ImageContract;
 import thenextvoyager.wallser.utility.Utility;
 
 import static thenextvoyager.wallser.data.Constants.IMAGE_FRAGMENT_TAG;
+import static thenextvoyager.wallser.data.Constants.PERMISSION_REQUEST_CODE;
 import static thenextvoyager.wallser.data.Constants.makeUserURL;
 
 
@@ -74,11 +79,30 @@ public class ImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (!checkPermission()) {
+                requestPermission();
+            }
+        }
         if (getArguments() != null) {
             object = (DataModel) getArguments().getSerializable(ARG_PARAM);
         }
         resolver = getContext().getContentResolver();
         isImageInDatabase = Utility.checkIfImageIsInDatabase(resolver, ImageContract.ImageEntry.COLUMN_NAME, object.name);
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.SET_WALLPAPER,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.INTERNET}, PERMISSION_REQUEST_CODE
+        );
     }
 
     @Override

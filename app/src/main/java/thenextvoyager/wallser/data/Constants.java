@@ -26,6 +26,7 @@ public class Constants {
     public static final String PAGEFRAG = "PAGEFRAGMENT";
     public static final String TAG_TO_FRAG = "TagToFrag";
     public static final String PAGE_NO = "pagenumber";
+    public static final int PERMISSION_REQUEST_CODE = 1000;
     private static final String TAG = Constants.class.getSimpleName();
     public static String api_key;
     public static HashMap<String, Fragment> TagToFrag;
