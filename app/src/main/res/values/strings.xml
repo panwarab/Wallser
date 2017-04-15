@@ -31,7 +31,7 @@
     <string name="share">Share Feedback</string>
     <string name="no_image_present">No Image Present!</string>
     <string name="connissue">Connectivity Problem!</string>
-    <string name="loading_images">Loading...</string>
+    <string name="loading_images">Loading</string>
     <string name="text_hint">Voyager</string>
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="UnsplashUrl">unsplash.com</string>
@@ -44,4 +44,6 @@
     <string name="title_activity_about">About</string>
     <string name="about">About</string>
     <string name="dev_string">Made with</string>
+    <string name="error">Error occured!</string>
+    <string name="save_failed">please try again!</string>
 </resources>

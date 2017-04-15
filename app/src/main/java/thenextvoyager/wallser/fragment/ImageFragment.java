@@ -202,7 +202,7 @@ public class ImageFragment extends Fragment {
                         try {
                             wallpaperManager.setBitmap(bitmap);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
                         }
                         Toast.makeText(getContext(), R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
                     }
@@ -228,7 +228,7 @@ public class ImageFragment extends Fragment {
                         try {
                             Utility.saveImage(bitmap, getContext(), object.name, true);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Toast.makeText(getContext(), R.string.save_failed, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

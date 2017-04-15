@@ -64,7 +64,7 @@ public class WidgetService extends RemoteViewsService {
                 Bitmap bitmap = picasso.load(cursor.getString(cursor.getColumnIndex(ImageContract.ImageEntry.COLUMN_REGURL))).error(R.drawable.sample).get();
                 remoteViews.setImageViewBitmap(R.id.wid_image, bitmap);
             } catch (IOException e) {
-                e.printStackTrace();
+
             }
             return remoteViews;
         }

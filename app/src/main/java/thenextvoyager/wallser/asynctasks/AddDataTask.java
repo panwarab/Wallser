@@ -48,7 +48,6 @@ public class AddDataTask extends AsyncTask<DataModel, Void, Boolean> {
             resolver.insert(ImageContract.ImageEntry.CONTENT_URI, contentValues);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

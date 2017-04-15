@@ -54,7 +54,6 @@ public class DeleteDataTask extends AsyncTask<DataModel, Void, Boolean> {
             resolver.delete(image_uri, null, null);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
 
