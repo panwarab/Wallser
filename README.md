@@ -16,12 +16,8 @@ A wallpaper browsing and downloading app
    
    `<item name="unsplash_api_key" type="string">9e208c068221e7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</item>`
    
-   
-## Screens
 
-> Screenshots will be added after UI is fully updated
-
-## Contributions
+## Wanna help in making Wallser the next big Photo and Editing app
 > Contributions are welcome. Fork it, clone it or download it!
 
 > For feature suggestion, either drop a mail or raise an issue. Any way is better.
